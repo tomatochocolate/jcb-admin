@@ -1,7 +1,5 @@
 /**
  * numeral.js
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2019/09/11 15:09
  */
 import numeral from 'numeral/src/numeral'
 import 'numeral/src/formats/currency'

@@ -1,7 +1,5 @@
 /**
  * 全局接口管理
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2017-05-25 19:18
  */
 import axios from 'axios/dist/axios'
 

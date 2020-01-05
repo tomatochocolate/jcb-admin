@@ -1,7 +1,5 @@
 /**
  * 其他路由
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2018/05/04 19:20
  */
 import Login from '@/views/other/login'
 import Errors from '@/views/other/errors'

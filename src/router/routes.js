@@ -1,7 +1,5 @@
 /**
- *
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2019/03/17 22:17
+ * 主要路由导出
  */
 import home from './modules/home'
 import user from './modules/user'

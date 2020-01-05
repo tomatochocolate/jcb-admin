@@ -1,7 +1,5 @@
 /**
  * 下载导出文件
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2017/11/27 10:46
  */
 import { extend, isFunction } from '@/libs/utils'
 

@@ -1,7 +1,5 @@
 /**
  *
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2018/09/04 09:48
  */
 import { _ } from './storage'
 

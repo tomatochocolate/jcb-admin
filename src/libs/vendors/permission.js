@@ -1,7 +1,5 @@
 /**
  * 权限验证
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2019/02/22 09:26
  */
 import { isString } from '@/libs/utils'
 

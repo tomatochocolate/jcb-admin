@@ -1,7 +1,5 @@
 /**
  *
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2018/09/30 14:59
  */
 const install = (Vue, opts = {}) => {
     // Exit if the plugin has already been installed.

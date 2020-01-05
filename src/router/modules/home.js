@@ -1,7 +1,5 @@
 /**
- * 主页
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2019/03/06 19:08
+ * 主页 控制台
  */
 import Main from '@/views/other/main'
 import Home from '@/views/home'

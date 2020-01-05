@@ -1,7 +1,5 @@
 /**
  * 实用工具库
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2017/12/18 11:56
  */
 import head from 'lodash/head'
 import last from 'lodash/last'

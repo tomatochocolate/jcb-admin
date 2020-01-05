@@ -1,7 +1,5 @@
 /**
  * 全局Page Mixin
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2019/03/31 21:23
  */
 import { page } from '@/config'
 import { extend } from '@/libs/utils'

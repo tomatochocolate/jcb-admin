@@ -1,7 +1,5 @@
 /**
  * 助手
- * @author 请叫我蛋蛋哥 <76573917@qq.com>
- * @created 2019/03/21 22:33
  */
 import axios from 'axios/dist/axios'
 
