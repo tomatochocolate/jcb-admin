@@ -63,11 +63,11 @@
             getListData () {
                 return new Promise(async (resolve, reject) => {
                     try {
-                        const { current: page, pageSize } = this.page
+                        const { current: pageNo, pageSize } = this.page
                         const { id, status, phone, created_at } = this.filterParams
 
                         const { count, members } = await api.user.list({
-                            page, pageSize, status, phone, id,
+                            pageNo, pageSize, status, phone, id,
                             created_at: created_at.filter(item => item).map(item => dayjs(item).format('YYYY-MM-DD')).join(',')
                         })
 

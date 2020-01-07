@@ -19,7 +19,6 @@
 <script type="text/babel">
     import * as api from '@/api'
     import { phone } from '@/libs/validator'
-
     export default {
         name: 'AddAccount',
         props: {
