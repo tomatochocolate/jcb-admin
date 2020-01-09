@@ -33,7 +33,8 @@
                 this.isSubmit = true
                 try {
                     const { data, code, message } = await system.login(this.params)
-
+                    console.log(data);
+                    
                     this.isSubmit = false
                     if (code !== 200) {
                         this.$Message.error(message)

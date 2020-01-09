@@ -19,3 +19,10 @@ export const list = (params) => {
 export const store = (params) => {
     return instance.post('/users', params)
 }
+/**
+ * 增加时长
+ * @returns { Promise }
+ */
+export const timer = (params) => {
+    return instance.post(`${module}/add_time`, params)
+}

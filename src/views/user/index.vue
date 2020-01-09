@@ -28,17 +28,22 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button @click="handleAddAccount">添加用户</Button>
+                        <Button type="info" @click="handleAddAccount">添加用户</Button>
+                        <Button type="info" @click="handleTimeAccount">增加时长</Button>
+                        <Button type="info" @click="handleFlowAccount">增加流量</Button>
+                        <Button @click="addTime">测试</Button>
                     </FormItem>
                 </Col>
             </Row>
         </Form>
-        <Table :data="list" :columns="columns" />
+        <Table :data="list" :columns="columns" @on-selection-change="selectFun"/>
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
         <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery" />
+        <time-account v-model="timeAccountModal" @on-refresh="handleFilterQuery" />
+        <flow-account v-model="flowAccountModal" @on-refresh="handleFilterQuery" />
     </Card>
 </template>
 <script type="text/babel">
@@ -48,17 +53,41 @@
     import { dayjs } from '@/libs/utils'
 
     import AddAccount from './components/add-account'
+    import TimeAccount from './components/time-account'
+    import FlowAccount from './components/flow-account'
     export default {
         name: 'User',
         mixins: [ page ],
-        components: { AddAccount },
+        components: { AddAccount ,TimeAccount,FlowAccount},
         methods: {
+            addTime(){
+               
+                 var members_id = 100524 ;
+                 const admin_id = 1;
+                 const add_time = 5 ;
+                 const unit = 1 ;
+               
+                const abc = api.user.timer({
+                    members_id  ,admin_id ,add_time ,unit 
+                })
+            },
             handleAddAccount () {
                 this.addAccountModal = true
+            },
+            handleTimeAccount () {
+                this.timeAccountModal = true
+            },
+             handleFlowAccount () {
+                this.flowAccountModal = true
             },
             handleFilterQuery () {
                 this.page.current = 1
                 this.getList()
+            },
+            selectFun(selection){
+                
+                this.checklist = selection
+                console.log(this.checklist);
             },
             getListData () {
                 return new Promise(async (resolve, reject) => {
@@ -94,6 +123,15 @@
                 },
                 addAccountModal: false,
                 importAccountModal: false,
+                timeAccountModal: false,
+                flowAccountModal: false,
+
+                checklist:[],
+
+                 members_id : 100524 ,
+                 admin_id : 1,
+                 add_time : 10 ,
+                 unit : 1 ,
 
                 columns: [
                     { key: 'status', title: '账号状态', width: 100, fixed: 'left' },
@@ -110,7 +148,8 @@
                     { key: 'ipLogin', title: '最近登录IP', width: 140 },
                     { key: 'versionSoft', title: '最近使用版本', width: 130 },
                     { key: 'channelReg', title: '注册渠道代码', width: 130 },
-                    { key: 'ipReg', title: '注册IP', width: 140 }
+                    { key: 'ipReg', title: '注册IP', width: 140 },
+                    { type:'selection',title:'选择',width:80,align:'center'}
                 ],
                 datePickerOptions: {
                     ...datePicker,
