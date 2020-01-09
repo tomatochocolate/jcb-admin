@@ -62,7 +62,7 @@
         methods: {
             addTime(){
                
-                 var members_id = 100524 ;
+                 var members_id = this.members_id ;
                  const admin_id = 1;
                  const add_time = 5 ;
                  const unit = 1 ;
@@ -128,7 +128,7 @@
 
                 checklist:[],
 
-                 members_id : 100524 ,
+                 members_id : ['100524','2000'] ,
                  admin_id : 1,
                  add_time : 10 ,
                  unit : 1 ,
