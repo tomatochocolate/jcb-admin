@@ -1,18 +1,26 @@
 <template>
-    <Modal mask-closable scrollable title="增加时长"
+    <Modal mask-closable scrollable title="修改时长"
            :width="500" v-model="show">
         <Form ref="form" :model="params" :rules="rules" :label-width="90"
               @submit.native.prevent>
-            <FormItem prop="phone" label="手机号码">
-                <Input clearable type="text" placeholder="请输入手机号码" :maxlength="11" v-model="params.phone"  @on-enter="handleSubmitForm"/>
+             <FormItem prop="add_time" label="修改时长">
+                        <Input clearable type="text" placeholder="" :maxlength="11" v-model="params.add_time"  @on-enter="handleSubmitForm" style="width:200px"/>
+                      
             </FormItem>
-            <FormItem prop="password" label="加时长">
-                <Input clearable type="text" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.password"  @on-enter="handleSubmitForm"/>
+           
+            <FormItem prop="status" label="">
+                        <Select clearable placeholder="时长单位" v-model="params.unit" style="width:100px" >
+                            <Option value="1">分</Option>
+                            <Option value="2">时</Option>
+                            <Option value="3">日</Option>
+                            <Option value="4">月</Option>
+                        </Select>
             </FormItem>
+            
         </Form>
         <div slot="footer">
             <Button type="text" @click="show = false">取消</Button>
-            <Button type="primary" @click="handleSubmitForm">确定</Button>
+            <Button type="primary" @click="addTime">确定</Button>
         </div>
     </Modal>
 </template>
@@ -25,6 +33,9 @@
             value: {
                 type: Boolean,
                 default: false
+            },
+            mID : {
+                
             }
         },
         watch: {
@@ -42,7 +53,7 @@
 
                 this.isSubmit = true
                 try {
-                    const { code, message } = await api.user.store(this.params)
+                    const { code, message } = await api.user.timer(this.params)
 
                     this.isSubmit = false
                     if (code !== 200) {
@@ -56,27 +67,35 @@
                     this.isSubmit = false
                     this.$Message.error(e.message)
                 }
-            }
+            },
+            addTime(){
+                
+                 var members_id = this.mID ;
+                 const admin_id = this.params.admin_id;
+                 const add_time = this.params.add_time ;
+                 const unit = this.params.unit ;
+                
+                const abc = api.user.timer({
+                    members_id  ,admin_id ,add_time ,unit 
+                })
+            },
         },
 
         data () {
             return {
                 show: this.value,
                 params: {
-                    phone: '',
-                    password: ''
+                    members_id : '' ,
+                    admin_id : 1 ,
+                    add_time : '' ,
+                    unit:'',
                 },
                 rules: {
-                    phone: [
-                        { required: true, message: '请输入手机号码', trigger: 'change blur' },
-                        { pattern: phone, message: '请输入正确的手机号码' }
-                    ],
-                    password: [
-                        { required: true, message: '请输入密码', trigger: 'change blur' },
-                        { min: 6, max: 16, message: '请输入6~16位的密码' }
+                    add_time: [
+                        { required: true, message: '请输入数值', trigger: 'change blur' },
                     ]
                 },
-                isSubmit: false
+                isSubmit: false,
             }
         }
     }

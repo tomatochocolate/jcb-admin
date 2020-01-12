@@ -26,3 +26,11 @@ export const store = (params) => {
 export const timer = (params) => {
     return instance.post(`${module}/add_time`, params)
 }
+/**
+ * 冻结，解封用户
+ * @returns { Promise }
+ */
+export const onoff = (params) => {
+    return instance.post(`${module}/enableOrDisable`, params)
+}
+

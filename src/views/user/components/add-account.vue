@@ -31,9 +31,11 @@
             show (value) {
                 if (!value) this.$refs.form.resetFields()
                 this.$emit('input', value)
+                
             },
             value (value) {
                 this.show = value
+                
             }
         },
         methods: {

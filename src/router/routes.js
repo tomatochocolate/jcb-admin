@@ -11,6 +11,7 @@ import order from './modules/order'
 import feedback from './modules/feedback'
 import appVersion from './modules/app_version'
 import statistics from './modules/statistics'
+import coupon from './modules/coupon'
 
 export default [
     ...home,
@@ -22,5 +23,6 @@ export default [
     ...order,
     ...feedback,
     ...appVersion,
-    ...statistics
+    ...statistics,
+    ...coupon
 ]

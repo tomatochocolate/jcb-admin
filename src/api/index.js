@@ -13,6 +13,7 @@ import * as system from './modules/system'
 import * as feedback from './modules/feedback'
 import * as statistics from './modules/statistics'
 import * as appVersion from './modules/app_version'
+import * as coupon from './modules/coupon'
 
 export {
     axios, instance,
@@ -26,5 +27,6 @@ export {
     system,
     feedback,
     statistics,
-    appVersion
+    appVersion,
+    coupon
 }

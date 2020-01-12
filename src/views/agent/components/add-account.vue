@@ -12,7 +12,7 @@
                 <Input clearable type="password" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.password" />
             </FormItem>
             <FormItem prop="realname" label="姓名">
-                <Input clearable type="realname" placeholder="请输真实姓名" v-model="params.realname" />
+                <Input clearable type="text" placeholder="请输真实姓名" v-model="params.realname" />
             </FormItem>
             <FormItem prop="phone" label="手机号">
                 <Input clearable type="text" placeholder="请输入手机号码" :maxlength="11" v-model="params.phone" />

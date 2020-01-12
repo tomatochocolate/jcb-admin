@@ -5,9 +5,9 @@
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="status">
                         <Select clearable placeholder="有效状态" v-model="filterParams.status">
-                            <Option value="0">正常</Option>
+                            <Option value="0">全部</Option>
                             <Option value="1">禁用</Option>
-                            <Option value="2">过期</Option>
+                            <Option value="2">正常</Option>
                             <Option value="3">体验</Option>
                         </Select>
                     </FormItem>
@@ -28,21 +28,25 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button type="info" @click="handleAddAccount">添加用户</Button>
-                        <Button type="info" @click="handleTimeAccount">增加时长</Button>
+                        <!-- <Button type="info" @click="handleAddAccount">添加用户</Button> -->
+                        <Button type="info" @click="handleTimeAccount">修改时长</Button>
                         <Button type="info" @click="handleFlowAccount">增加流量</Button>
-                        <Button @click="addTime">测试</Button>
                     </FormItem>
                 </Col>
             </Row>
         </Form>
-        <Table :data="list" :columns="columns" @on-selection-change="selectFun"/>
+        <Table :data="list" :columns="columns" @on-selection-change="selectFun">
+            <template slot-scope="{ row, index }" slot="action">
+                <Button type="primary" size="small" style="margin-right: 5px" @click="handleON">启用</Button>
+                <Button type="error" size="small" @click="handleOFF">禁用</Button>
+            </template>
+        </Table>
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
         <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery" />
-        <time-account v-model="timeAccountModal" @on-refresh="handleFilterQuery" />
+        <time-account v-model="timeAccountModal" @on-refresh="handleFilterQuery" :mID='members_id'/>
         <flow-account v-model="flowAccountModal" @on-refresh="handleFilterQuery" />
     </Card>
 </template>
@@ -51,6 +55,7 @@
     import page from '@/mixins/page'
     import { datePicker } from '@/config'
     import { dayjs } from '@/libs/utils'
+    import axios from 'axios'
 
     import AddAccount from './components/add-account'
     import TimeAccount from './components/time-account'
@@ -60,17 +65,6 @@
         mixins: [ page ],
         components: { AddAccount ,TimeAccount,FlowAccount},
         methods: {
-            addTime(){
-               
-                 var members_id = this.members_id ;
-                 const admin_id = 1;
-                 const add_time = 5 ;
-                 const unit = 1 ;
-               
-                const abc = api.user.timer({
-                    members_id  ,admin_id ,add_time ,unit 
-                })
-            },
             handleAddAccount () {
                 this.addAccountModal = true
             },
@@ -85,9 +79,62 @@
                 this.getList()
             },
             selectFun(selection){
+                var checkID = selection.map(function(item){
+                    return item.memberId
+                })
                 
-                this.checklist = selection
-                console.log(this.checklist);
+                this.members_id = checkID.join(",")
+            },
+            handleON (){
+                // const userStatus = api.user.onoff({
+                // members_id:100524,pageName:'/console/user',flag:0
+                // })
+                let that = this
+                axios({
+                      url: "http://sy4yst.natappfree.cc/api-console/member/enableOrDisable", //在线跨域请求
+                      method: "post", //默认是get请求
+                      headers: {
+                        //设置请求头
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        'token':'00000001wQXosXHZFpKz0hs1K43YN0xL'
+                      },
+                      params: {
+                        //？search后面的值写在params中
+                        members_id:this.members_id,pageName:'/console/user',flag:2
+                      }
+                    }).then(function(val) {
+                          console.log(val); // axios会对我们请求来的结果进行再一次的封装（ 让安全性提高 ）
+                          that.getList()
+                        })
+                        .catch(function(err) {
+                          console.log(err);
+                         });
+            },
+            handleOFF (){
+                // const userStatus = api.user.onoff({
+                // members_id:100524,pageName:'/console/user',flag:0
+                // })
+                let that = this
+                axios({
+                      url: "http://sy4yst.natappfree.cc/api-console/member/enableOrDisable", //在线跨域请求
+                      method: "post", //默认是get请求
+                      headers: {
+                        //设置请求头
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        'token':'00000001wQXosXHZFpKz0hs1K43YN0xL'
+                      },
+                      params: {
+                        //？search后面的值写在params中
+                        members_id:this.members_id,pageName:'/console/user',flag:0
+                      }
+                    })
+                    .then(function(val) {
+                      console.log(val); // axios会对我们请求来的结果进行再一次的封装（ 让安全性提高 ）
+                      that.getList()
+                    })
+                    .catch(function(err) {
+                      console.log(err);
+                    });
             },
             getListData () {
                 return new Promise(async (resolve, reject) => {
@@ -126,9 +173,8 @@
                 timeAccountModal: false,
                 flowAccountModal: false,
 
-                checklist:[],
 
-                 members_id : ['100524','2000'] ,
+                 members_id : '',
                  admin_id : 1,
                  add_time : 10 ,
                  unit : 1 ,
@@ -149,7 +195,8 @@
                     { key: 'versionSoft', title: '最近使用版本', width: 130 },
                     { key: 'channelReg', title: '注册渠道代码', width: 130 },
                     { key: 'ipReg', title: '注册IP', width: 140 },
-                    { type:'selection',title:'选择',width:80,align:'center'}
+                    { type:'selection',title:'选择',width:80,align:'center'},
+                    { slot: 'action',title: '用户状态',width: 150,align: 'center'}
                 ],
                 datePickerOptions: {
                     ...datePicker,
@@ -160,7 +207,8 @@
             }
         },
         mounted () {
-            this.getList()
+            this.getList();
+            
         }
     }
 </script>
