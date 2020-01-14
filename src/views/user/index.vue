@@ -37,8 +37,8 @@
         </Form>
         <Table :data="list" :columns="columns" @on-selection-change="selectFun">
             <template slot-scope="{ row, index }" slot="action">
-                <Button type="primary" size="small" style="margin-right: 5px" @click="handleON">启用</Button>
-                <Button type="error" size="small" @click="handleOFF">禁用</Button>
+                <Button type="primary" size="small" style="margin-right: 5px" @click="handleON(row)">启用</Button>
+                <Button type="error" size="small" @click="handleOFF(row)">禁用</Button>
             </template>
         </Table>
         <Page style="margin-top: 15px;"
@@ -85,11 +85,10 @@
                 
                 this.members_id = checkID.join(",")
             },
-            handleON (){
+            handleON (e){
                 // const userStatus = api.user.onoff({
                 // members_id:100524,pageName:'/console/user',flag:0
                 // })
-                let that = this
                 axios({
                       url: "http://sy4yst.natappfree.cc/api-console/member/enableOrDisable", //在线跨域请求
                       method: "post", //默认是get请求
@@ -100,7 +99,7 @@
                       },
                       params: {
                         //？search后面的值写在params中
-                        members_id:this.members_id,pageName:'/console/user',flag:2
+                        members_id:e.memberId,pageName:'/console/user',flag:2
                       }
                     }).then(function(val) {
                           console.log(val); // axios会对我们请求来的结果进行再一次的封装（ 让安全性提高 ）
@@ -110,7 +109,7 @@
                           console.log(err);
                          });
             },
-            handleOFF (){
+            handleOFF (e){
                 // const userStatus = api.user.onoff({
                 // members_id:100524,pageName:'/console/user',flag:0
                 // })
@@ -125,7 +124,7 @@
                       },
                       params: {
                         //？search后面的值写在params中
-                        members_id:this.members_id,pageName:'/console/user',flag:0
+                        members_id:e.memberId,pageName:'/console/user',flag:0
                       }
                     })
                     .then(function(val) {
@@ -180,7 +179,7 @@
                  unit : 1 ,
 
                 columns: [
-                    { key: 'status', title: '账号状态', width: 100, fixed: 'left' },
+                    { key: 'status', title: '账号状态', width: 100},
                     { key: 'memberId', title: '用户ID', width: 100 },
                     { key: 'memberType', title: '注册平台', width: 100 },
                     { key: 'memberAccount', title: '会员账号', width: 140 },
@@ -195,8 +194,8 @@
                     { key: 'versionSoft', title: '最近使用版本', width: 130 },
                     { key: 'channelReg', title: '注册渠道代码', width: 130 },
                     { key: 'ipReg', title: '注册IP', width: 140 },
-                    { type:'selection',title:'选择',width:80,align:'center'},
-                    { slot: 'action',title: '用户状态',width: 150,align: 'center'}
+                    { type:'selection',title:'选择',width:80,align:'center', fixed: 'left'},
+                    { slot: 'action',title: '用户状态',width: 150,align: 'center', }
                 ],
                 datePickerOptions: {
                     ...datePicker,

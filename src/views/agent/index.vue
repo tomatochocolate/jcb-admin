@@ -5,8 +5,8 @@
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="status">
                         <Select clearable placeholder="有效状态" v-model="filterParams.status">
-                            <Option value="0">有效</Option>
-                            <Option value="1">无效</Option>
+                            <Option value="0">正常</Option>
+                            <Option value="1">禁用</Option>
                         </Select>
                     </FormItem>
                 </Col>
@@ -25,12 +25,17 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button @click="handleAddAccount">新增账号</Button>
+                        <Button @click="handleAddAccount">新增代理商</Button>
                     </FormItem>
                 </Col>
             </Row>
         </Form>
-        <Table :columns="columns" />
+        <Table :data="list" :columns="columns" >
+            <template slot-scope="{ row, index }" slot="action">
+                <Button type="primary" size="small" style="margin-right: 5px" @click="">启用</Button>
+                <Button type="error" size="small" @click="">禁用</Button>
+            </template>
+        </Table>
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
@@ -51,7 +56,40 @@
             handleAddAccount () {
                 this.addAccountModal = true
             },
-            handleFilterQuery () {}
+            handleFilterQuery () {},
+                        getListData () {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        const { current: pageNo, pageSize } = this.page
+                        // const { count, coupons } = await api.user.list({
+                        //     pageNo, pageSize
+                        // })
+                        const count = 16
+                        const agents = [
+		                    {
+		                    	'account':'1',
+                                'status':'2',
+                                'level':'3',
+                                'totalLower':'4',
+                                'totalUsers':'5',
+                                'timeCreate':'6',
+                                'createTime':'7',
+                                'lastLoginTime':'8',
+                                'functional':'9',
+                                'coupon':'10'
+		                    }
+                        ]
+                        resolve({
+                            data: agents,
+                            meta: {
+                                total: count
+                            }
+                        })
+                    } catch (e) {
+                        reject(e)
+                    }
+                })
+            }
         },
         data () {
             return {
@@ -64,24 +102,14 @@
 
                 columns: [
                     {
-                        type: 'expand',
-                        width: 50,
-                        render: (h, params) => {
-                            return h(TableExpand, {
-                                props: {
-                                    row: params.row
-                                }
-                            })
-                        }
-                    },
-                    {
+                        slot:'action',
                         key: 'id',
-                        title: '账号ID',
+                        title: '操作',
                         minWidth: 100
                     },
                     {
                         key: 'account',
-                        title: '账号',
+                        title: '代理级别',
                         minWidth: 100
                     },
                     {
@@ -91,40 +119,45 @@
                     },
                     {
                         key: 'level',
-                        title: '等级',
+                        title: '上级',
                         minWidth: 100
                     },
                     {
                         key: 'totalLower',
-                        title: '总下级数',
+                        title: '账户',
                         width: 100
                     },
                     {
                         key: 'totalUsers',
-                        title: '用户数',
+                        title: '姓名',
                         width: 100
                     },
                     {
                         key: 'createTime',
-                        title: '注册时间',
+                        title: '电话',
                         minWidth: 100
                     },
                     {
                         key: 'lastLoginTime',
-                        title: '最近登录',
+                        title: '公司',
                         width: 150
                     },
                     {
                         key: 'functional',
-                        title: '操作',
+                        title: '备注',
                         width: 150,
-                        fixed: 'right'
+                    },
+                     {
+                        key: 'coupon',
+                        title: '卡券余额',
+                        width: 150,
                     }
                 ]
             }
         },
         mounted () {
             this.isReady = true
+            this.getList()
         }
     }
 </script>

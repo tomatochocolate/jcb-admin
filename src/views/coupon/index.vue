@@ -5,8 +5,9 @@
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="status">
                         <Select clearable placeholder="使用状态" v-model="filterParams.status">
-                            <Option value="0">已使用</Option>
-                            <Option value="1">未使用</Option>
+                            <Option value="0">全部</Option>
+                            <Option value="1">已使用</Option>
+                            <Option value="2">未使用</Option>
                         </Select>
                     </FormItem>
                 </Col>
@@ -17,14 +18,44 @@
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
                         <Button type="info" @click="">导出</Button>
+                        <Button type="info">生成卡密</Button>
+                        <Button type="info" @click="handleCouponAccountModal">卡券数量分配</Button>
+                    </FormItem>
+                </Col>
+                <Col span="3"> 
+                    <FormItem label="月套餐">
+                        <InputNumber  disabled="disabled" :value='comboList.month'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="季度套餐">
+                        <InputNumber  disabled="disabled" :value='comboList.quarter'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="半年套餐">
+                        <InputNumber  disabled="disabled" :value='comboList.half'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="全年套餐">
+                        <InputNumber  disabled="disabled" :value='comboList.year'></InputNumber>
                     </FormItem>
                 </Col>
             </Row>
         </Form>
-        <Table :data="list" :columns="columns" />
+        <Table :data="list" :columns="columns" >
+            <template slot-scope="{ row, index }" slot="action">
+                <Button type="primary" size="small" style="margin-right: 5px" @click="">启用</Button>
+                <Button type="error" size="small" @click="">禁用</Button>
+            </template>
+        </Table>
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
-              @on-change="" @on-page-size-change="" />
+              @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
+
+         <coupon-account v-model="couponAccountModal" @on-refresh="handleFilterQuery" :comboList='comboList'/>
+
     </Card>
 </template>
 <script type="text/babel">
@@ -32,12 +63,17 @@
     import page from '@/mixins/page'
     import { datePicker } from '@/config'
     import { dayjs } from '@/libs/utils'
+    import CouponAccount from './components/coupon-account'
 
     export default {
         name: 'coupon',
         mixins: [ page ],
+        components:{CouponAccount},
         methods: {
-             handleFilterQuery () {
+            handleCouponAccountModal(){
+                this.couponAccountModal = true
+            },
+            handleFilterQuery () {
                 this.page.current = 1
                 this.getList()
             },
@@ -49,7 +85,63 @@
                         //     pageNo, pageSize
                         // })
                         const count = 15
-                        const coupons = []
+                        const coupons = [
+                            {
+		                    	'adId':'1',
+                                'content':'2',
+                                'timeAdd':'3',
+                                'timeModify':'4',
+                                'bindIphone':'5',
+                                'timeCreate':'6',
+                                'validity':'7',
+                                'status':'8',
+                                'handle':'9',
+		                    },
+		                    {
+		                    	'adId':'1',
+                                'content':'2',
+                                'timeAdd':'3',
+                                'timeModify':'4',
+                                'bindIphone':'5',
+                                'timeCreate':'6',
+                                'validity':'7',
+                                'status':'8',
+                                'handle':'9',
+		                    },
+		                    {
+		                    	'adId':'1',
+                                'content':'2',
+                                'timeAdd':'3',
+                                'timeModify':'4',
+                                'bindIphone':'5',
+                                'timeCreate':'6',
+                                'validity':'7',
+                                'status':'8',
+                                'handle':'9',
+		                    },
+		                    {
+		                    	'adId':'1',
+                                'content':'2',
+                                'timeAdd':'3',
+                                'timeModify':'4',
+                                'bindIphone':'5',
+                                'timeCreate':'6',
+                                'validity':'7',
+                                'status':'8',
+                                'handle':'9',
+		                    },
+		                    {
+		                    	'adId':'1',
+                                'content':'2',
+                                'timeAdd':'3',
+                                'timeModify':'4',
+                                'bindIphone':'5',
+                                'timeCreate':'6',
+                                'validity':'7',
+                                'status':'8',
+                                'handle':'9',
+		                    }
+                        ]
                         resolve({
                             data: coupons,
                             meta: {
@@ -68,6 +160,13 @@
                     coupon: '',
                     status: '',
                 },
+                comboList:{
+                    month : 1,
+                    quarter : 2,
+                    half : 3,
+                    year : 4
+                },
+                couponAccountModal:false,
                 columns: [
                     { title: '卡号', key: 'adId', width: 100 },
                     { title: '所属代理商', key: 'content', width: 150, ellipsis: true, tooltip: true },
@@ -77,7 +176,7 @@
                     { title: '激活时间', key: 'timeCreate', width: 100 },
                     { title: '有效期', key: 'validity', width: 100 },
                     { title: '卡密', key: 'status', minWidth: 100,align: 'center'},
-                    { title: '操作', key: 'handle', width: 100 },
+                    {slot: 'action',title: '操作',width: 150,align: 'center',fixed:'left'}
                     
                 ],
                 datePickerOptions: {
@@ -90,6 +189,7 @@
         },
         mounted () {
             this.getList()
+            
         }
     }
 </script>
