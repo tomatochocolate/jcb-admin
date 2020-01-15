@@ -23,14 +23,6 @@
             <FormItem prop="realname" label="备注">
                 <Input clearable type="text" placeholder="请输入备注" v-model="params.remark" />
             </FormItem>                        
-            <!-- <FormItem prop="agentId" class="agent">
-                <template slot="label">
-                    选择代理商从属关系
-                    <div style="margin-top: 2px;">（三级）</div>
-                </template>
-                <Select clearable placeholder="选择代理商" v-model="params.agentId">
-                </Select>
-            </FormItem> -->
         </Form>
         <div slot="footer">
             <Button type="text" @click="show = false">取消</Button>
@@ -42,7 +34,7 @@
     import { phone } from '@/libs/validator'
 
     export default {
-        name: 'AddAccount',
+        name: 'modifyAccount',
         props: {
             value: {
                 type: Boolean,

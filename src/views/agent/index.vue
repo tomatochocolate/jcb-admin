@@ -10,7 +10,7 @@
                         </Select>
                     </FormItem>
                 </Col>
-                <Col :xs="12" :sm="6" :lg="4" :xl="3">
+                <!-- <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="level">
                         <Select clearable placeholder="账号等级" v-model="filterParams.level">
                             <Option value="1">一级</Option>
@@ -18,22 +18,24 @@
                             <Option value="3">三级</Option>
                         </Select>
                     </FormItem>
-                </Col>
+                </Col> -->
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="account"><Input clearable placeholder="账号" v-model="filterParams.account" /></FormItem>
                 </Col>
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button @click="handleAddAccount">新增代理商</Button>
+                        <Button type="info" @click="handleAddAccount">新增代理商</Button>
+                        <Button type="info" @click="handleTableAccount">增加代理卡券余额</Button>
                     </FormItem>
                 </Col>
             </Row>
         </Form>
         <Table :data="list" :columns="columns" >
             <template slot-scope="{ row, index }" slot="action">
-                <Button type="primary" size="small" style="margin-right: 5px" @click="">启用</Button>
-                <Button type="error" size="small" @click="">禁用</Button>
+                <Button type="primary" size="small" style="margin-right: 5px" @click="onAgent(row)">启用</Button>
+                <Button type="error" size="small" style="margin-right: 5px" @click="offAgent(row)">禁用</Button>
+                <Button type="success" size="small" @click="handlemodifyAccount">修改</Button>
             </template>
         </Table>
         <Page style="margin-top: 15px;"
@@ -41,21 +43,36 @@
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
         <add-account v-model="addAccountModal" />
+        <table-expand v-model="tableAccountModal" />
+        <modify-account v-model="modifyAccountModal" />
     </Card>
 </template>
 <script type="text/babel">
     import page from '@/mixins/page'
     import AddAccount from './components/add-account'
     import TableExpand from './components/table-expand'
+    import ModifyAccount from './components/modify-account'
 
     export default {
         name: 'Agent',
         mixins: [ page ],
-        components: { AddAccount },
+        components: { AddAccount,TableExpand ,ModifyAccount},
         methods: {
+            onAgent(row){
+                console.log(this.$store.state.app.user.id);
+            },
+            offAgent(row){
+                console.log(this);
+            },
             handleAddAccount () {
                 this.addAccountModal = true
             },
+            handleTableAccount () {
+                this.tableAccountModal = true
+            }, 
+            handlemodifyAccount () {
+                this.modifyAccountModal = true
+            },                       
             handleFilterQuery () {},
                         getListData () {
                 return new Promise(async (resolve, reject) => {
@@ -70,7 +87,19 @@
 		                    	'account':'1',
                                 'status':'2',
                                 'level':'3',
-                                'totalLower':'4',
+                                'totalLower':'a',
+                                'totalUsers':'5',
+                                'timeCreate':'6',
+                                'createTime':'7',
+                                'lastLoginTime':'8',
+                                'functional':'9',
+                                'coupon':'10'
+		                    },
+                             {
+		                    	'account':'1',
+                                'status':'2',
+                                'level':'3',
+                                'totalLower':'b',
                                 'totalUsers':'5',
                                 'timeCreate':'6',
                                 'createTime':'7',
@@ -99,13 +128,16 @@
                     status: ''
                 },
                 addAccountModal: false,
+                tableAccountModal:false,
+                modifyAccountModal: false,
 
                 columns: [
                     {
                         slot:'action',
                         key: 'id',
                         title: '操作',
-                        minWidth: 100
+                        minWidth: 100,
+                        fixed:'left'
                     },
                     {
                         key: 'account',
@@ -140,17 +172,17 @@
                     {
                         key: 'lastLoginTime',
                         title: '公司',
-                        width: 150
+                        width: 100
                     },
                     {
                         key: 'functional',
                         title: '备注',
-                        width: 150,
+                        width: 100,
                     },
                      {
                         key: 'coupon',
                         title: '卡券余额',
-                        width: 150,
+                        width: 100,
                     }
                 ]
             }

@@ -23,7 +23,9 @@ export default {
         storage.local.setAll({
             user: payload.user,
             token: payload.token
-        }, cache.expires)
+        }
+        // , cache.expires
+        )
     },
     // 退出登录
     [type.LOGOUT] (state) {
