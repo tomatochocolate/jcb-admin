@@ -18,7 +18,7 @@
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
                         <Button type="info" @click="">导出</Button>
-                        <Button type="info">生成卡密</Button>
+                        <Button type="info" @click="handleCreateAccountModal">生成卡密</Button>
                         <Button type="info" @click="handleCouponAccountModal">卡券数量分配</Button>
                     </FormItem>
                 </Col>
@@ -55,6 +55,7 @@
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
          <coupon-account v-model="couponAccountModal" @on-refresh="handleFilterQuery" :comboList='comboList'/>
+         <create-account v-model="createAccountModal" @on-refresh="handleFilterQuery" :comboList='comboList'/>
 
     </Card>
 </template>
@@ -64,14 +65,18 @@
     import { datePicker } from '@/config'
     import { dayjs } from '@/libs/utils'
     import CouponAccount from './components/coupon-account'
+    import CreateAccount from './components/create-account'
 
     export default {
         name: 'coupon',
         mixins: [ page ],
-        components:{CouponAccount},
+        components:{CouponAccount,CreateAccount},
         methods: {
             handleCouponAccountModal(){
                 this.couponAccountModal = true
+            },
+            handleCreateAccountModal(){
+                this.createAccountModal = true
             },
             handleFilterQuery () {
                 this.page.current = 1
@@ -167,6 +172,7 @@
                     year : 4
                 },
                 couponAccountModal:false,
+                createAccountModal:false,
                 columns: [
                     { title: '卡号', key: 'adId', width: 100 },
                     { title: '所属代理商', key: 'content', width: 150, ellipsis: true, tooltip: true },
@@ -189,7 +195,8 @@
         },
         mounted () {
             this.getList()
-            
+            console.log(JSON.parse(window.localStorage.getItem("user")).id);
+
         }
     }
 </script>
