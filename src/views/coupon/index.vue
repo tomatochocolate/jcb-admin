@@ -5,21 +5,21 @@
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="status">
                         <Select clearable placeholder="使用状态" v-model="filterParams.status">
-                            <Option value="0">全部</Option>
+                            <!-- <Option value="0">全部</Option> -->
                             <Option value="1">已使用</Option>
                             <Option value="2">未使用</Option>
                         </Select>
                     </FormItem>
                 </Col>
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
-                    <FormItem prop="id"><Input clearable placeholder="卡号" v-model="filterParams.coupon" /></FormItem>
+                    <FormItem prop="id"><Input clearable placeholder="卡号" v-model="filterParams.cardId" /></FormItem>
                 </Col>
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button type="info" @click="">导出</Button>
-                        <Button type="info" @click="handleCreateAccountModal">生成卡密</Button>
-                        <Button type="info" @click="handleCouponAccountModal">卡券数量分配</Button>
+                        <!-- <Button type="info" @click="">导出</Button> -->
+                        <Button type="info" @click="handleCreateAccountModal">生成卡券</Button>
+                        <!-- <Button type="info" @click="handleCouponAccountModal">卡券数量分配</Button>     -->
                     </FormItem>
                 </Col>
                 <Col span="3"> 
@@ -86,69 +86,15 @@
                 return new Promise(async (resolve, reject) => {
                     try {
                         const { current: pageNo, pageSize } = this.page
-                        // const { count, coupons } = await api.user.list({
-                        //     pageNo, pageSize
-                        // })
-                        const count = 15
-                        const coupons = [
-                            {
-		                    	'adId':'1',
-                                'content':'2',
-                                'timeAdd':'3',
-                                'timeModify':'4',
-                                'bindIphone':'5',
-                                'timeCreate':'6',
-                                'validity':'7',
-                                'status':'8',
-                                'handle':'9',
-		                    },
-		                    {
-		                    	'adId':'1',
-                                'content':'2',
-                                'timeAdd':'3',
-                                'timeModify':'4',
-                                'bindIphone':'5',
-                                'timeCreate':'6',
-                                'validity':'7',
-                                'status':'8',
-                                'handle':'9',
-		                    },
-		                    {
-		                    	'adId':'1',
-                                'content':'2',
-                                'timeAdd':'3',
-                                'timeModify':'4',
-                                'bindIphone':'5',
-                                'timeCreate':'6',
-                                'validity':'7',
-                                'status':'8',
-                                'handle':'9',
-		                    },
-		                    {
-		                    	'adId':'1',
-                                'content':'2',
-                                'timeAdd':'3',
-                                'timeModify':'4',
-                                'bindIphone':'5',
-                                'timeCreate':'6',
-                                'validity':'7',
-                                'status':'8',
-                                'handle':'9',
-		                    },
-		                    {
-		                    	'adId':'1',
-                                'content':'2',
-                                'timeAdd':'3',
-                                'timeModify':'4',
-                                'bindIphone':'5',
-                                'timeCreate':'6',
-                                'validity':'7',
-                                'status':'8',
-                                'handle':'9',
-		                    }
-                        ]
+                        const { status,cardId } = this.filterParams
+                        const adminId = JSON.parse(window.localStorage.getItem("user")).id
+
+                        const { count, cardRecords } = await api.coupon.list({
+                            pageNo, pageSize,status,cardId,adminId
+                        })
+                        // this.comboList.month = 10    
                         resolve({
-                            data: coupons,
+                            data: cardRecords,
                             meta: {
                                 total: count
                             }
@@ -162,26 +108,24 @@
         data () {
             return {
                  filterParams: {
-                    coupon: '',
+                    cardId: '',
                     status: '',
                 },
                 comboList:{
                     month : 1,
-                    quarter : 2,
-                    half : 3,
-                    year : 4
+                    quarter :1,
+                    half : 1,
+                    year : 1
                 },
                 couponAccountModal:false,
                 createAccountModal:false,
                 columns: [
-                    { title: '卡号', key: 'adId', width: 100 },
-                    { title: '所属代理商', key: 'content', width: 150, ellipsis: true, tooltip: true },
-                    { title: '卡状态', key: 'timeAdd', width: 160 },
-                    { title: '用户ID', key: 'timeModify', width: 160 },
-                    { title: '绑定手机', key: 'bindIphone', width: 100 },
-                    { title: '激活时间', key: 'timeCreate', width: 100 },
-                    { title: '有效期', key: 'validity', width: 100 },
-                    { title: '卡密', key: 'status', minWidth: 100,align: 'center'},
+                    { title: '卡号', key: 'cardId', width: 200 },
+                    { title: '所属代理商', key: 'proxyId', width: 150, ellipsis: true, tooltip: true },
+                    { title: '卡状态', key: 'status', width: 160 },
+                    { title: '激活时间', key: 'timeAdd', width: 200 },
+                    { title: '有效期', key: 'timeExpire', width: 200 },
+                    { title: '卡密', key: 'cardSerial', minWidth: 100,align: 'center'},
                     {slot: 'action',title: '操作',width: 150,align: 'center',fixed:'left'}
                     
                 ],
@@ -195,8 +139,10 @@
         },
         mounted () {
             this.getList()
-            console.log(JSON.parse(window.localStorage.getItem("user")).id);
-
+            // const localID = JSON.parse(window.localStorage.getItem("user")).id
+            // console.log(JSON.parse(window.localStorage.getItem("user")).id);
+            
+            
         }
     }
 </script>

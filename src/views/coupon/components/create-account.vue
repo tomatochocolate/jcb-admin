@@ -4,10 +4,11 @@
         <Form ref="form" :model="params" :rules="rules" :label-width="90"
               @submit.native.prevent>
               
-            <FormItem prop="status" label="">
-                        <Select clearable placeholder="填写ID" v-model="params.unit" style="width:100px"  filterable>
+            <FormItem prop="status" label="ID">
+                        <!-- <Select clearable placeholder="填写ID" v-model="params.unit" style="width:100px"  filterable>
                             <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.value }}</Option>
-                        </Select>
+                        </Select> -->
+                        <InputNumber  disabled="disabled" :value='couponID'></InputNumber>
             </FormItem>
             <FormItem  label="月套餐">
                 <InputNumber
@@ -17,6 +18,7 @@
                     :formatter="value => `${value}`"
                     :parser="value => value.replace(/[\s\.]/, '')">
                 </InputNumber>
+                <InputNumber  disabled="disabled" :value='comboList.month'style="margin-left:100px"></InputNumber>
             </FormItem>
             <FormItem  label="季度套餐">
                 <InputNumber
@@ -26,6 +28,7 @@
                     :formatter="value => `${value}`"
                     :parser="value => value.replace(/[\s\.]/, '')">
                 </InputNumber>
+                <InputNumber  disabled="disabled" :value='comboList.quarter'style="margin-left:100px"></InputNumber>
             </FormItem>
             <FormItem  label="半年套餐">
                 <InputNumber
@@ -35,6 +38,7 @@
                     :formatter="value => `${value}`"
                     :parser="value => value.replace(/[\s\.]/, '')">
                 </InputNumber>
+                <InputNumber  disabled="disabled" :value='comboList.half'style="margin-left:100px"></InputNumber>
             </FormItem>
             <FormItem  label="全年套餐">
                 <InputNumber
@@ -44,6 +48,7 @@
                     :formatter="value => `${value}`"
                     :parser="value => value.replace(/[\s\.]/, '')">
                 </InputNumber>
+                <InputNumber  disabled="disabled" :value='comboList.year'style="margin-left:100px"></InputNumber>
             </FormItem>
 
         </Form>
@@ -110,6 +115,9 @@
                 })
             },
         },
+        mounted (){
+             this.couponID =  JSON.parse(window.localStorage.getItem("user")).id
+        },
 
         data () {
             return {
@@ -120,9 +128,10 @@
                     year : 0
                 },
                 show: this.value,
+                couponID:1,
                 params: {
                     members_id : '' ,
-                    admin_id : 1 ,
+                    admin_id : '' ,
                     add_time : '' ,
                     unit:'',
                 },

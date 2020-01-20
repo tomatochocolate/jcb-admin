@@ -30,7 +30,7 @@
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
                         <!-- <Button type="info" @click="handleAddAccount">添加用户</Button> -->
                         <Button type="info" @click="handleTimeAccount">修改时长</Button>
-                        <Button type="info" @click="handleFlowAccount">增加流量</Button>
+                        <!-- <Button type="info" @click="handleFlowAccount">增加流量</Button> -->
                     </FormItem>
                 </Col>
             </Row>

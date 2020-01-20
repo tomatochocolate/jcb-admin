@@ -28,8 +28,8 @@
                                 <span class="layout-user-name">{{ user.realName }}</span>
                                 <Icon type="md-arrow-dropdown"></Icon>
                             </a>
-                            <DropdownMenu slot="list">
-                                <DropdownItem name="logout">退出登录</DropdownItem>
+                            <DropdownMenu  slot="list">
+                                <DropdownItem name="logout" ><BUtton @click="outLogin">退出登录</BUtton></DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </Row>
@@ -74,7 +74,12 @@
                 setMenus: 'menus',
                 setCurrentRoute: 'currentRoute'
             }),
-
+            outLogin(){
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                this.$router.push("/login");
+                
+            },
             breadcrumbTo (to, index = 0, breadcrumbs) {
                 if (index < breadcrumbs.length - 1) {
                     return to

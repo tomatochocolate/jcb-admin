@@ -14,6 +14,7 @@ import * as feedback from './modules/feedback'
 import * as statistics from './modules/statistics'
 import * as appVersion from './modules/app_version'
 import * as coupon from './modules/coupon'
+import * as agent from './modules/agent'
 
 export {
     axios, instance,
@@ -28,5 +29,6 @@ export {
     feedback,
     statistics,
     appVersion,
-    coupon
+    coupon,
+    agent
 }

@@ -36,6 +36,6 @@ export default [
     },
     {
         path: '*',
-        redirect: { name: 'errors.404', replace: true }
+        redirect: { name: 'login', replace: true }
     }
 ]

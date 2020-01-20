@@ -5,8 +5,9 @@
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="status">
                         <Select clearable placeholder="有效状态" v-model="filterParams.status">
-                            <Option value="0">正常</Option>
-                            <Option value="1">禁用</Option>
+                            <Option value="2">全部</Option>
+                            <Option value="1">正常</Option>
+                            <Option value="0">禁用</Option>
                         </Select>
                     </FormItem>
                 </Col>
@@ -26,7 +27,27 @@
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
                         <Button type="info" @click="handleAddAccount">新增代理商</Button>
-                        <Button type="info" @click="handleTableAccount">增加代理卡券余额</Button>
+                        <Button type="info" @click="handleTableAccount">分配代理卡券余额</Button>
+                    </FormItem>
+                </Col>
+                <Col span="3"> 
+                    <FormItem label="月套餐">
+                        <InputNumber  disabled="disabled" :value='comboList[0].balance'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="季度套餐">
+                        <InputNumber  disabled="disabled" :value='comboList[1].balance'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="半年套餐">
+                        <InputNumber  disabled="disabled" :value='comboList[2].balance'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="全年套餐">
+                        <InputNumber  disabled="disabled" :value='comboList[3].balance'></InputNumber>
                     </FormItem>
                 </Col>
             </Row>
@@ -35,20 +56,34 @@
             <template slot-scope="{ row, index }" slot="action">
                 <Button type="primary" size="small" style="margin-right: 5px" @click="onAgent(row)">启用</Button>
                 <Button type="error" size="small" style="margin-right: 5px" @click="offAgent(row)">禁用</Button>
-                <Button type="success" size="small" @click="handlemodifyAccount">修改</Button>
+                <!-- <Button type="success" size="small" @click="handlemodifyAccount">修改</Button> -->
             </template>
+            <template slot-scope="{ row, index }" slot="goodsButton">
+                <Button type="warning" size="small" style="margin-right: 5px" @click="watchYe(row)">查看余额</Button>
+                <Drawer title="套餐总余额" :closable="false" v-model="value1">
+                    <Form>
+                        <FormItem :label="couponYe[index].goodsName" label-position="top" v-for="item,index in couponYe"  :key="index">
+                            <InputNumber  disabled="disabled" :value='couponYe[index].balance' ></InputNumber>
+                        </FormItem>
+                    </Form>  
+                        
+                </Drawer>
+            </template>
+            
         </Table>
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
         <add-account v-model="addAccountModal" />
-        <table-expand v-model="tableAccountModal" />
+        <table-expand v-model="tableAccountModal" :comboList='comboList'/>
         <modify-account v-model="modifyAccountModal" />
     </Card>
 </template>
 <script type="text/babel">
+    import * as api from '@/api'
     import page from '@/mixins/page'
+    import { datePicker } from '@/config'
     import AddAccount from './components/add-account'
     import TableExpand from './components/table-expand'
     import ModifyAccount from './components/modify-account'
@@ -58,11 +93,45 @@
         mixins: [ page ],
         components: { AddAccount,TableExpand ,ModifyAccount},
         methods: {
+            watchYe(row){
+                this.value1 = true;
+                console.log(row.goodsList);
+                this.couponYe = row.goodsList
+            },
             onAgent(row){
-                console.log(this.$store.state.app.user.id);
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        const adminId = JSON.parse(window.localStorage.getItem("user")).id
+                        const proxyId = row.proxyId
+                        const flag = 1;
+                        
+                       
+                        const { data } = await api.agent.enableOrDisable({adminId,proxyId,flag})
+                        
+                        resolve(
+                            this.getList()
+                        )
+                    } catch (e) {
+                        reject(e)
+                    }
+                })
             },
             offAgent(row){
-                console.log(this);
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        const adminId = JSON.parse(window.localStorage.getItem("user")).id
+                        const proxyId = row.proxyId
+                        const flag = 0;
+                       
+                        const { data } = await api.agent.enableOrDisable({adminId,proxyId,flag})
+                        
+                        resolve(
+                            this.getList()
+                        )
+                    } catch (e) {
+                        reject(e)
+                    }
+                })
             },
             handleAddAccount () {
                 this.addAccountModal = true
@@ -73,43 +142,27 @@
             handlemodifyAccount () {
                 this.modifyAccountModal = true
             },                       
-            handleFilterQuery () {},
-                        getListData () {
+            handleFilterQuery () {
+                this.page.current = 1
+                this.getList()
+            },
+            getListData () {
                 return new Promise(async (resolve, reject) => {
                     try {
                         const { current: pageNo, pageSize } = this.page
-                        // const { count, coupons } = await api.user.list({
-                        //     pageNo, pageSize
-                        // })
-                        const count = 16
-                        const agents = [
-		                    {
-		                    	'account':'1',
-                                'status':'2',
-                                'level':'3',
-                                'totalLower':'a',
-                                'totalUsers':'5',
-                                'timeCreate':'6',
-                                'createTime':'7',
-                                'lastLoginTime':'8',
-                                'functional':'9',
-                                'coupon':'10'
-		                    },
-                             {
-		                    	'account':'1',
-                                'status':'2',
-                                'level':'3',
-                                'totalLower':'b',
-                                'totalUsers':'5',
-                                'timeCreate':'6',
-                                'createTime':'7',
-                                'lastLoginTime':'8',
-                                'functional':'9',
-                                'coupon':'10'
-		                    }
-                        ]
+                        const { status,account } = this.filterParams
+                        const adminId = JSON.parse(window.localStorage.getItem("user")).id
+                        
+                        const { count, proxy } = await api.agent.list({
+                            pageNo, pageSize,adminId,status,account
+                        })
+                        const { data } = await api.agent.queryCNum({
+                            adminId
+                        })
+                        this.comboList = data 
+                        
                         resolve({
-                            data: agents,
+                            data: proxy,
                             meta: {
                                 total: count
                             }
@@ -125,11 +178,40 @@
                 filterParams: {
                     level: '',
                     account: '',
-                    status: ''
+                    status: 2
                 },
+                value1 :false,
+                comboList:[
+	            	{
+	            		"balance":1000,
+	            		"goods_id":101
+	            	},
+	            	{
+	            		"balance":200,
+	            		"goods_id":102
+	            	},
+	            	{
+	            		"balance":750,
+	            		"goods_id":103
+	            	},
+	            	{
+	            		"balance":200,
+	            		"goods_id":104
+	            	}
+	            ],
                 addAccountModal: false,
                 tableAccountModal:false,
                 modifyAccountModal: false,
+
+                couponYe:[
+                    {
+                        aid : 1
+                    },
+                    {
+                        aid : 2
+                    }
+                ]
+                ,
 
                 columns: [
                     {
@@ -140,56 +222,49 @@
                         fixed:'left'
                     },
                     {
-                        key: 'account',
+                        key: 'proxyLevel',
                         title: '代理级别',
+                        align: 'center',
                         minWidth: 100
                     },
                     {
                         key: 'status',
-                        title: '账号状态',
-                        width: 100
+                        title: '账号状态(1)正常(0)禁用',
+                        width: 200,
+                        align: 'center'
                     },
                     {
-                        key: 'level',
-                        title: '上级',
+                        key: 'proxyName',
+                        title: '代理商',
+                        align: 'center',
                         minWidth: 100
                     },
                     {
-                        key: 'totalLower',
-                        title: '账户',
-                        width: 100
-                    },
-                    {
-                        key: 'totalUsers',
-                        title: '姓名',
-                        width: 100
-                    },
-                    {
-                        key: 'createTime',
-                        title: '电话',
+                        key: 'proxyId',
+                        title: '代理ID',
+                        align: 'center',
                         minWidth: 100
                     },
                     {
-                        key: 'lastLoginTime',
-                        title: '公司',
-                        width: 100
+                        key: 'loginAccount',
+                        title: '账号',
+                        align: 'center',
+                        width: 200
                     },
                     {
-                        key: 'functional',
-                        title: '备注',
-                        width: 100,
+                        slot:'goodsButton',
+                        key: 'goodsButton',
+                        title: '套餐',
+                        align: 'center',
+                      
                     },
-                     {
-                        key: 'coupon',
-                        title: '卡券余额',
-                        width: 100,
-                    }
                 ]
             }
         },
         mounted () {
             this.isReady = true
             this.getList()
+            
         }
     }
 </script>
