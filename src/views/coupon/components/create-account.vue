@@ -8,53 +8,35 @@
                         <!-- <Select clearable placeholder="填写ID" v-model="params.unit" style="width:100px"  filterable>
                             <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.value }}</Option>
                         </Select> -->
-                        <InputNumber  disabled="disabled" :value='couponID'></InputNumber>
+                        <InputNumber  disabled="disabled" :value='proxyId'></InputNumber>
             </FormItem>
-            <FormItem  label="月套餐">
+            <FormItem prop="status" label="">
+                        <Select clearable placeholder="选择套餐" v-model="params.unit" style="width:100px" >
+                            <Option value="90">7天套餐</Option>
+                            <Option value="95">15天套餐</Option>
+                            <Option value="101">包月套餐</Option>
+                            <Option value="102">季度套餐</Option>
+                            <Option value="103">半年套餐</Option>
+                            <Option value="104">全年套餐</Option>
+                            <Option value="201">高速包月</Option>
+                            <Option value="202">高速季度</Option>
+                            <Option value="203">高速半年</Option>
+                            <Option value="204">高速全年</Option>
+                        </Select>
+            </FormItem>
+            <FormItem  label="">
                 <InputNumber
-                    :max="comboList.month"
+                    :max="1000"
                     :min="0"
-                    v-model="shareList.month"
+                    v-model="number"
                     :formatter="value => `${value}`"
                     :parser="value => value.replace(/[\s\.]/, '')">
                 </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList.month'style="margin-left:100px"></InputNumber>
             </FormItem>
-            <FormItem  label="季度套餐">
-                <InputNumber
-                    :max="comboList.quarter"
-                    :min="0"
-                    v-model="shareList.quarter"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList.quarter'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="半年套餐">
-                <InputNumber
-                    :max="comboList.half"
-                    :min="0"
-                    v-model="shareList.half"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList.half'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="全年套餐">
-                <InputNumber
-                    :max="comboList.year"
-                    :min="0"
-                    v-model="shareList.year"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList.year'style="margin-left:100px"></InputNumber>
-            </FormItem>
-
         </Form>
         <div slot="footer">
             <Button type="text" @click="show = false">取消</Button>
-            <Button type="primary" @click="addTime">确定</Button>
+            <Button type="primary" @click="handleSubmitForm">确定</Button>
         </div>
     </Modal>
 </template>
@@ -71,7 +53,8 @@
             },
             comboList : {
                 
-            }
+            },
+            proxyId:''
         },
         watch: {
             show (value) {
@@ -88,7 +71,14 @@
 
                 this.isSubmit = true
                 try {
-                    const { code, message } = await api.user.timer(this.params)
+                     const proxyId = this.proxyId
+                     const number = this.number
+                     const goodsId = this.params.unit
+                     const cardType = 1
+    
+                    const {code,message} = await api.coupon.create({
+                       proxyId,number,goodsId,cardType
+                    })
 
                     this.isSubmit = false
                     if (code !== 200) {
@@ -100,19 +90,22 @@
                     this.$Message.success('添加成功')
                 } catch (e) {
                     this.isSubmit = false
-                    this.$Message.error(e.message)
+                    // this.$Message.error(e.message)
+                    
+                    this.$emit('on-refresh')
                 }
             },
             addTime(){
                 
-                 var members_id = this.mID ;
-                 const admin_id = this.params.admin_id;
-                 const add_time = this.params.add_time ;
-                 const unit = this.params.unit ;
-                
-                const abc = api.user.timer({
-                    members_id  ,admin_id ,add_time ,unit 
+                 const proxyId = this.proxyId
+                 const number = this.number
+                 const goodsId = this.params.unit
+                 const cardType = 1
+
+                const abc = api.coupon.create({
+                   proxyId,number,goodsId,cardType
                 })
+                this.$emit('on-refresh')
             },
         },
         mounted (){
@@ -135,6 +128,7 @@
                     add_time : '' ,
                     unit:'',
                 },
+                number:0,
                 rules: {
                     add_time: [
                         { required: true, message: '请输入数值', trigger: 'change blur' },

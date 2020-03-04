@@ -5,7 +5,6 @@
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="status">
                         <Select clearable placeholder="使用状态" v-model="filterParams.status">
-                            <!-- <Option value="0">全部</Option> -->
                             <Option value="1">已使用</Option>
                             <Option value="2">未使用</Option>
                         </Select>
@@ -17,37 +16,71 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <!-- <Button type="info" @click="">导出</Button> -->
                         <Button type="info" @click="handleCreateAccountModal">生成卡券</Button>
-                        <!-- <Button type="info" @click="handleCouponAccountModal">卡券数量分配</Button>     -->
+                    </FormItem>
+                </Col>
+                <Col span="3"> 
+                    <FormItem label="7天套餐">
+                        <InputNumber  disabled="disabled" :value='comboList[0].balance'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3"> 
+                    <FormItem label="15天套餐">
+                        <InputNumber  disabled="disabled" :value='comboList[1].balance'></InputNumber>
                     </FormItem>
                 </Col>
                 <Col span="3"> 
                     <FormItem label="月套餐">
-                        <InputNumber  disabled="disabled" :value='comboList.month'></InputNumber>
+                        <InputNumber  disabled="disabled" :value='comboList[2].balance'></InputNumber>
                     </FormItem>
                 </Col>
                 <Col span="3">
                     <FormItem label="季度套餐">
-                        <InputNumber  disabled="disabled" :value='comboList.quarter'></InputNumber>
+                        <InputNumber  disabled="disabled" :value='comboList[3].balance'></InputNumber>
                     </FormItem>
                 </Col>
                 <Col span="3">
                     <FormItem label="半年套餐">
-                        <InputNumber  disabled="disabled" :value='comboList.half'></InputNumber>
+                        <InputNumber  disabled="disabled" :value='comboList[4].balance'></InputNumber>
                     </FormItem>
                 </Col>
                 <Col span="3">
                     <FormItem label="全年套餐">
-                        <InputNumber  disabled="disabled" :value='comboList.year'></InputNumber>
+                        <InputNumber  disabled="disabled" :value='comboList[5].balance'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="高速包月">
+                        <InputNumber  disabled="disabled" :value='comboList[6].balance'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="高速季度">
+                        <InputNumber  disabled="disabled" :value='comboList[7].balance'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="高速半年">
+                        <InputNumber  disabled="disabled" :value='comboList[8].balance'></InputNumber>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem label="高速全年">
+                        <InputNumber  disabled="disabled" :value='comboList[9].balance'></InputNumber>
                     </FormItem>
                 </Col>
             </Row>
         </Form>
         <Table :data="list" :columns="columns" >
-            <template slot-scope="{ row, index }" slot="action">
-                <Button type="primary" size="small" style="margin-right: 5px" @click="">启用</Button>
-                <Button type="error" size="small" @click="">禁用</Button>
+            <!-- <template slot-scope="{ row, index }" slot="action">
+                <Button type="primary" size="small" style="margin-right: 5px" @click="handleEnable(row)">启用</Button>
+                <Button type="error" size="small" @click="handleEnableNo(row)">禁用</Button>
+            </template> -->
+            <template slot-scope="{ row, index }" slot="status">
+                {{row.status == 1?'正常':'禁用'}}
+            </template>
+            <template slot-scope="{ row, index }" slot="goodsId">
+                {{goodsChoose(row.goodsId)}}
             </template>
         </Table>
         <Page style="margin-top: 15px;"
@@ -55,7 +88,7 @@
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
          <coupon-account v-model="couponAccountModal" @on-refresh="handleFilterQuery" :comboList='comboList'/>
-         <create-account v-model="createAccountModal" @on-refresh="handleFilterQuery" :comboList='comboList'/>
+         <create-account v-model="createAccountModal" @on-refresh="handleFilterQuery" :comboList='comboList' :proxyId='proxyId'/>
 
     </Card>
 </template>
@@ -66,6 +99,7 @@
     import { dayjs } from '@/libs/utils'
     import CouponAccount from './components/coupon-account'
     import CreateAccount from './components/create-account'
+    // import { log } from 'util';
 
     export default {
         name: 'coupon',
@@ -82,17 +116,45 @@
                 this.page.current = 1
                 this.getList()
             },
+            handleEnable (row) {
+                const adminId = JSON.parse(window.localStorage.getItem("user")).id
+                const cardId = row.cardId
+                const status = 1
+                api.coupon.update({
+                    adminId,status,cardId
+                })
+                this.handleFilterQuery ()
+            },
+            handleEnableNo (row) {
+                const adminId = JSON.parse(window.localStorage.getItem("user")).id
+                const cardId = row.cardId
+                const status = 2
+                api.coupon.update({
+                    adminId,status,cardId
+                })
+                this.handleFilterQuery ()
+            },
             getListData () {
                 return new Promise(async (resolve, reject) => {
                     try {
                         const { current: pageNo, pageSize } = this.page
                         const { status,cardId } = this.filterParams
+                        
                         const adminId = JSON.parse(window.localStorage.getItem("user")).id
-
-                        const { count, cardRecords } = await api.coupon.list({
+                        
+                        const { count, cardRecords,proxyId } = await api.coupon.list({
                             pageNo, pageSize,status,cardId,adminId
                         })
-                        // this.comboList.month = 10    
+                        
+                        this.proxyId = proxyId
+                        const { data,code } = await api.agent.queryCNum({
+                            adminId
+                        })
+                        if (code == 200){
+                            this.comboList = data.sort((a,b)=>{
+                              return a.goods_id -  b.goods_id
+                            });
+                        }     
                         resolve({
                             data: cardRecords,
                             meta: {
@@ -103,6 +165,18 @@
                         reject(e)
                     }
                 })
+            },
+            goodsChoose(goodsId){
+                if(goodsId == 101){
+                    return '包月套餐'
+                }else if (goodsId == 102){
+                    return '季度套餐'
+                }else if(goodsId == 103){
+                    return '半年套餐'
+                }else if (goodsId == 104){
+                    return '全年套餐'
+                }
+                return '体验套餐'
             }
         },
         data () {
@@ -111,22 +185,44 @@
                     cardId: '',
                     status: '',
                 },
-                comboList:{
-                    month : 1,
-                    quarter :1,
-                    half : 1,
-                    year : 1
-                },
+                comboList:[
+                    {
+	            		"balance":0,
+	            		"goods_id":90
+	            	},
+	            	{
+	            		"balance":0,
+	            		"goods_id":95
+	            	},
+	            	{
+	            		"balance":0,
+	            		"goods_id":101
+	            	},
+	            	{
+	            		"balance":0,
+	            		"goods_id":102
+	            	},
+	            	{
+	            		"balance":0,
+	            		"goods_id":103
+	            	},
+	            	{
+	            		"balance":0,
+	            		"goods_id":104
+	            	}
+	            ],
+                proxyId:123,
                 couponAccountModal:false,
                 createAccountModal:false,
                 columns: [
                     { title: '卡号', key: 'cardId', width: 200 },
                     { title: '所属代理商', key: 'proxyId', width: 150, ellipsis: true, tooltip: true },
-                    { title: '卡状态', key: 'status', width: 160 },
+                    { title: '卡状态', slot: 'status', width: 160 },
+                    { title: '套餐', slot: 'goodsId', width: 160 },
                     { title: '激活时间', key: 'timeAdd', width: 200 },
                     { title: '有效期', key: 'timeExpire', width: 200 },
                     { title: '卡密', key: 'cardSerial', minWidth: 100,align: 'center'},
-                    {slot: 'action',title: '操作',width: 150,align: 'center',fixed:'left'}
+                    // {slot: 'action',title: '操作',width: 150,align: 'center',fixed:'left'}
                     
                 ],
                 datePickerOptions: {
@@ -139,8 +235,6 @@
         },
         mounted () {
             this.getList()
-            // const localID = JSON.parse(window.localStorage.getItem("user")).id
-            // console.log(JSON.parse(window.localStorage.getItem("user")).id);
             
             
         }

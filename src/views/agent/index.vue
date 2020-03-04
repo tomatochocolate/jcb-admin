@@ -75,8 +75,8 @@
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
-        <add-account v-model="addAccountModal" />
-        <table-expand v-model="tableAccountModal" :comboList='comboList'/>
+        <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
+        <table-expand  v-show="tableAccountModal" :comboList='comboList' @fatherMethod="fatherMethod"  @on-refresh='handleTableAccount' :tableAccountModal='tableAccountModal'/>
         <modify-account v-model="modifyAccountModal" />
     </Card>
 </template>
@@ -93,9 +93,24 @@
         mixins: [ page ],
         components: { AddAccount,TableExpand ,ModifyAccount},
         methods: {
+            handleAddAccount () {
+                this.addAccountModal = true
+            },
+            handleTableAccount () {
+                // this.tableAccountModal = true
+                // alert(this.tableAccountModal)
+                this.tableAccountModal = !this.tableAccountModal
+                
+            }, 
+            handlemodifyAccount () {
+                this.modifyAccountModal = true
+            },                       
+            handleFilterQuery () {
+                this.page.current = 1
+                this.getList()
+            },
             watchYe(row){
                 this.value1 = true;
-                console.log(row.goodsList);
                 this.couponYe = row.goodsList
             },
             onAgent(row){
@@ -133,19 +148,10 @@
                     }
                 })
             },
-            handleAddAccount () {
-                this.addAccountModal = true
+            fatherMethod() {
+               this.getList()
             },
-            handleTableAccount () {
-                this.tableAccountModal = true
-            }, 
-            handlemodifyAccount () {
-                this.modifyAccountModal = true
-            },                       
-            handleFilterQuery () {
-                this.page.current = 1
-                this.getList()
-            },
+            
             getListData () {
                 return new Promise(async (resolve, reject) => {
                     try {
@@ -183,19 +189,19 @@
                 value1 :false,
                 comboList:[
 	            	{
-	            		"balance":1000,
+	            		"balance":0,
 	            		"goods_id":101
 	            	},
 	            	{
-	            		"balance":200,
+	            		"balance":0,
 	            		"goods_id":102
 	            	},
 	            	{
-	            		"balance":750,
+	            		"balance":0,
 	            		"goods_id":103
 	            	},
 	            	{
-	            		"balance":200,
+	            		"balance":0,
 	            		"goods_id":104
 	            	}
 	            ],

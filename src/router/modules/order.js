@@ -7,7 +7,7 @@ export default [
         path: '/order',
         meta: {
             icon: 'md-reorder',
-            title: '订单管理',
+            title: '未开通',
             permissions: [ 'guest' ]
         },
         component: Main,
@@ -18,7 +18,7 @@ export default [
                 meta: {
                     menu: false
                 },
-                component: () => import(/* webpackChunkName: "order" */'@/views/order')
+                component: () => import(/* webpackChunkName: "order" */'@/views/other/develop')
             }
         ]
     }

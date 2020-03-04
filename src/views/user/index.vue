@@ -5,7 +5,7 @@
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="status">
                         <Select clearable placeholder="有效状态" v-model="filterParams.status">
-                            <Option value="0">全部</Option>
+                            <Option value="">全部</Option>
                             <Option value="1">禁用</Option>
                             <Option value="2">正常</Option>
                             <Option value="3">体验</Option>
@@ -39,6 +39,9 @@
             <template slot-scope="{ row, index }" slot="action">
                 <Button type="primary" size="small" style="margin-right: 5px" @click="handleON(row)">启用</Button>
                 <Button type="error" size="small" @click="handleOFF(row)">禁用</Button>
+            </template>
+            <template slot-scope="{ row, index }" slot="status">
+                {{row.status == 2?'正常':'禁用'}}
             </template>
         </Table>
         <Page style="margin-top: 15px;"
@@ -86,16 +89,18 @@
                 this.members_id = checkID.join(",")
             },
             handleON (e){
+                
+                let that = this
                 // const userStatus = api.user.onoff({
                 // members_id:100524,pageName:'/console/user',flag:0
                 // })
                 axios({
-                      url: "http://sy4yst.natappfree.cc/api-console/member/enableOrDisable", //在线跨域请求
+                      url: "https://test.jichibang2019.com/api-console/member/enableOrDisable", //在线跨域请求
                       method: "post", //默认是get请求
                       headers: {
                         //设置请求头
                         "Content-Type": "application/x-www-form-urlencoded",
-                        'token':'00000001wQXosXHZFpKz0hs1K43YN0xL'
+                        'token':'000000019DEtx2NGf1adckYbJpjNrkke'
                       },
                       params: {
                         //？search后面的值写在params中
@@ -103,7 +108,7 @@
                       }
                     }).then(function(val) {
                           console.log(val); // axios会对我们请求来的结果进行再一次的封装（ 让安全性提高 ）
-                          that.getList()
+                          that.handleFilterQuery()
                         })
                         .catch(function(err) {
                           console.log(err);
@@ -113,23 +118,24 @@
                 // const userStatus = api.user.onoff({
                 // members_id:100524,pageName:'/console/user',flag:0
                 // })
+                
                 let that = this
                 axios({
-                      url: "http://sy4yst.natappfree.cc/api-console/member/enableOrDisable", //在线跨域请求
+                      url: "https://test.jichibang2019.com/api-console/member/enableOrDisable", //在线跨域请求
                       method: "post", //默认是get请求
                       headers: {
                         //设置请求头
                         "Content-Type": "application/x-www-form-urlencoded",
-                        'token':'00000001wQXosXHZFpKz0hs1K43YN0xL'
+                        'token':'000000019DEtx2NGf1adckYbJpjNrkke'
                       },
                       params: {
                         //？search后面的值写在params中
-                        members_id:e.memberId,pageName:'/console/user',flag:0
+                        members_id:e.memberId,pageName:'/console/user',flag:1
                       }
                     })
                     .then(function(val) {
                       console.log(val); // axios会对我们请求来的结果进行再一次的封装（ 让安全性提高 ）
-                      that.getList()
+                      that.handleFilterQuery()
                     })
                     .catch(function(err) {
                       console.log(err);
@@ -140,9 +146,9 @@
                     try {
                         const { current: pageNo, pageSize } = this.page
                         const { id, status, phone, created_at } = this.filterParams
-
+                        const adminId = JSON.parse(window.localStorage.getItem("user")).id
                         const { count, members } = await api.user.list({
-                            pageNo, pageSize, status, phone, id,
+                            adminId,pageNo, pageSize, status, phone, id,
                             created_at: created_at.filter(item => item).map(item => dayjs(item).format('YYYY-MM-DD')).join(',')
                         })
 
@@ -179,7 +185,7 @@
                  unit : 1 ,
 
                 columns: [
-                    { key: 'status', title: '账号状态', width: 100},
+                    { slot: 'status', title: '账号状态', width: 100},
                     { key: 'memberId', title: '用户ID', width: 100 },
                     { key: 'memberType', title: '注册平台', width: 100 },
                     { key: 'memberAccount', title: '会员账号', width: 140 },
@@ -194,8 +200,8 @@
                     { key: 'versionSoft', title: '最近使用版本', width: 130 },
                     { key: 'channelReg', title: '注册渠道代码', width: 130 },
                     { key: 'ipReg', title: '注册IP', width: 140 },
-                    { type:'selection',title:'选择',width:80,align:'center', fixed: 'left'},
-                    { slot: 'action',title: '用户状态',width: 150,align: 'center', }
+                    { type:'selection',title:'选择',width:80,align:'center', fixed: 'right'},
+                    { slot: 'action',title: '用户状态',width: 150,align: 'center',fixed: 'left' }
                 ],
                 datePickerOptions: {
                     ...datePicker,

@@ -8,7 +8,7 @@ export default [
         path: '/feedback',
         meta: {
             icon: 'md-notifications',
-            title: '反馈管理',
+            title: '未开通',
             permissions: [ 'guest' ]
         },
         component: Main,
@@ -19,7 +19,7 @@ export default [
                 meta: {
                     menu: false
                 },
-                component: () => import(/* webpackChunkName: "feedback" */'@/views/feedback')
+                component: () => import(/* webpackChunkName: "feedback" */'@/views/other/develop')
             }
         ]
     }

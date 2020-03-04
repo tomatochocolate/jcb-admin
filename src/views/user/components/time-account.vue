@@ -68,16 +68,33 @@
                     this.$Message.error(e.message)
                 }
             },
-            addTime(){
+            async addTime(){
+                if (!await this.$refs.form.validate() || this.isSubmit) return
+                this.isSubmit = true
+                try {
+                    var members_id = this.mID ;
+                    const admin_id = this.params.admin_id;
+                    const add_time = this.params.add_time ;
+                    const unit = this.params.unit ;
+
+                    const {code,msg}= await api.user.timer({
+                        members_id  ,admin_id ,add_time ,unit 
+                    })
+                        console.log(code);
+
+                        this.isSubmit = false
+                        if (code != 0) {
+                            this.$Message.error(msg)
+                            return
+                        }
+                        this.show = false
+                        this.$emit('on-refresh')
+                        this.$Message.success('添加成功')
+                    } catch (e) {
+                        this.isSubmit = false
+                        // this.$Message.error(e.message)
+                    }
                 
-                 var members_id = this.mID ;
-                 const admin_id = this.params.admin_id;
-                 const add_time = this.params.add_time ;
-                 const unit = this.params.unit ;
-                
-                const abc = api.user.timer({
-                    members_id  ,admin_id ,add_time ,unit 
-                })
             },
         },
 

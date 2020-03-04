@@ -25,7 +25,7 @@
                         <full-screen v-model="isFullscreen" />
                         <Dropdown @on-click="handleClickUserDropdown">
                             <a href="javascript:;">
-                                <span class="layout-user-name">{{ user.realName }}</span>
+                                <span class="layout-user-name">{{ user.loginAccount }}</span>
                                 <Icon type="md-arrow-dropdown"></Icon>
                             </a>
                             <DropdownMenu  slot="list">
@@ -75,9 +75,16 @@
                 setCurrentRoute: 'currentRoute'
             }),
             outLogin(){
+                var tagNumber = JSON.parse(window.localStorage.getItem("user")).id
+                var tagL = 'tagsList:'+tagNumber
+                
                 localStorage.removeItem("user");
                 localStorage.removeItem("token");
+                localStorage.removeItem(tagL);
                 this.$router.push("/login");
+                
+                
+                
                 
             },
             breadcrumbTo (to, index = 0, breadcrumbs) {

@@ -45,7 +45,7 @@
                         user: {
                             id: data.adminId,
                             username: data.adminId,
-                            realName: data.realName
+                            loginAccount: data.loginAccount
                         },
                         token: data.token
                     })

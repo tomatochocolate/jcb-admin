@@ -8,7 +8,7 @@ export default [
         path: '/advert',
         meta: {
             icon: 'md-ionic',
-            title: '广告管理',
+            title: '未开通',
             permissions: [ 'guest' ]
         },
         component: Main,
@@ -19,7 +19,7 @@ export default [
                 meta: {
                     menu: false
                 },
-                component: () => import(/* webpackChunkName: "advert" */'@/views/advert')
+                component: () => import(/* webpackChunkName: "advert" */'@/views/other/develop')
             }
         ]
     }

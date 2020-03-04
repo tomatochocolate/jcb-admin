@@ -8,7 +8,7 @@ export default [
         path: '/goods',
         meta: {
             icon: 'md-list',
-            title: '产品管理',
+            title: '代理商管理',
             permissions: [ 'guest' ]
         },
         component: Main,

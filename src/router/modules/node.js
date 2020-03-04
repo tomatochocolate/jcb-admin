@@ -8,7 +8,7 @@ export default [
         path: '/node',
         meta: {
             icon: 'md-git-network',
-            title: '节点管理',
+            title: '未开通',
             permissions: [ 'guest' ]
         },
         component: Main,
@@ -19,7 +19,7 @@ export default [
                 meta: {
                     menu: false
                 },
-                component: () => import(/* webpackChunkName: "node" */'@/views/node')
+                component: () => import(/* webpackChunkName: "node" */'@/views/other/develop')
             }
         ]
     }

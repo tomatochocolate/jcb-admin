@@ -8,7 +8,7 @@ export default [
         path: '/app_version',
         meta: {
             icon: 'ios-appstore',
-            title: 'App版本管理',
+            title: '未开通',
             permissions: [ 'guest' ]
         },
         component: Main,
@@ -19,7 +19,7 @@ export default [
                 meta: {
                     menu: false
                 },
-                component: () => import(/* webpackChunkName: "app_version" */'@/views/app_version')
+                component: () => import(/* webpackChunkName: "app_version" */'@/views/other/develop')
             }
         ]
     }

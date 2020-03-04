@@ -16,13 +16,13 @@ import coupon from './modules/coupon'
 export default [
     ...home,
     ...user,
-    ...advert,
+    ...goods,
+    ...coupon,
     ...node,
     ...agent,
-    ...goods,
     ...order,
     ...feedback,
     ...appVersion,
     ...statistics,
-    ...coupon
+    ...advert
 ]
