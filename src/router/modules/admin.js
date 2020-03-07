@@ -1,25 +1,25 @@
 /**
- * 主页 产品管理
+ * 主页 卡券管理
  */
 import Main from '@/views/other/main'
 
 export default [
     {
-        path: '/goods',
+        path: '/admin',
         meta: {
-            icon: 'md-list',
-            title: '套餐管理',
+            icon: 'md-ionic',
+            title: '管理员管理',
             permissions: [ 'guest' ]
         },
         component: Main,
         children: [
             {
-                name: 'goods',
+                name: 'admin',
                 path: '',
                 meta: {
                     menu: false
                 },
-                component: () => import(/* webpackChunkName: "goods" */'@/views/goods')
+                component: () => import(/* webpackChunkName: "admin" */'@/views/admin')
             }
         ]
     }

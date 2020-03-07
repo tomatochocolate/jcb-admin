@@ -12,17 +12,19 @@ import feedback from './modules/feedback'
 import appVersion from './modules/app_version'
 import statistics from './modules/statistics'
 import coupon from './modules/coupon'
+import admin from './modules/admin'
 
 export default [
     ...home,
     ...user,
     ...goods,
     ...coupon,
-    ...node,
     ...agent,
+    ...node,
     ...order,
     ...feedback,
     ...appVersion,
     ...statistics,
-    ...advert
+    ...advert,
+    ...admin
 ]

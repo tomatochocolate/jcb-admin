@@ -1,5 +1,5 @@
 /**
- * 产品
+ * 管理员
  */
 import instance from '@/api/http'
 

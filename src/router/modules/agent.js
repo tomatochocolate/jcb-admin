@@ -8,7 +8,7 @@ export default [
         path: '/agent',
         meta: {
             icon: 'ios-people',
-            title: '未开通',
+            title: '代理商管理',
             permissions: [ 'guest' ]
         },
         component: Main,
@@ -19,7 +19,7 @@ export default [
                 meta: {
                     menu: false
                 },
-                component: () => import(/* webpackChunkName: "agent" */'@/views/other/develop')
+                component: () => import(/* webpackChunkName: "agent" */'@/views/agent')
             }
         ]
     }

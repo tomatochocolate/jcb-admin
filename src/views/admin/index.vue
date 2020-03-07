@@ -35,7 +35,7 @@
     import { log } from 'util';
 
     export default {
-        name: 'Goods',
+        name: 'Admin',
         mixins: [ page ],
         components: {},
         methods: {
@@ -64,7 +64,7 @@
                         const { status,account } = this.filterParams
                         const adminId = JSON.parse(window.localStorage.getItem("user")).id
                         
-                        const { count, proxy } = await api.goods.list({
+                        const { count, proxy } = await api.admin.list({
                             pageNo, pageSize,adminId,status,account
                         })
 

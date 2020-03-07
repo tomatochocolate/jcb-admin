@@ -31,53 +31,23 @@
                     </FormItem>
                 </Col>
                 <Col span="3"> 
-                    <FormItem label="7天套餐">
-                        <InputNumber  disabled="disabled" :value='comboList[0].balance'></InputNumber>
-                    </FormItem>
-                </Col>
-                <Col span="3"> 
-                    <FormItem label="15天套餐">
-                        <InputNumber  disabled="disabled" :value='comboList[1].balance'></InputNumber>
-                    </FormItem>
-                </Col>
-                <Col span="3"> 
                     <FormItem label="月套餐">
-                        <InputNumber  disabled="disabled" :value='comboList[2].balance'></InputNumber>
+                        <InputNumber  disabled="disabled" :value='comboList[0].balance'></InputNumber>
                     </FormItem>
                 </Col>
                 <Col span="3">
                     <FormItem label="季度套餐">
-                        <InputNumber  disabled="disabled" :value='comboList[3].balance'></InputNumber>
+                        <InputNumber  disabled="disabled" :value='comboList[1].balance'></InputNumber>
                     </FormItem>
                 </Col>
                 <Col span="3">
                     <FormItem label="半年套餐">
-                        <InputNumber  disabled="disabled" :value='comboList[4].balance'></InputNumber>
+                        <InputNumber  disabled="disabled" :value='comboList[2].balance'></InputNumber>
                     </FormItem>
                 </Col>
                 <Col span="3">
                     <FormItem label="全年套餐">
-                        <InputNumber  disabled="disabled" :value='comboList[5].balance'></InputNumber>
-                    </FormItem>
-                </Col>
-                <Col span="3">
-                    <FormItem label="高速包月">
-                        <InputNumber  disabled="disabled" :value='comboList[6].balance'></InputNumber>
-                    </FormItem>
-                </Col>
-                <Col span="3">
-                    <FormItem label="高速季度">
-                        <InputNumber  disabled="disabled" :value='comboList[7].balance'></InputNumber>
-                    </FormItem>
-                </Col>
-                <Col span="3">
-                    <FormItem label="高速半年">
-                        <InputNumber  disabled="disabled" :value='comboList[8].balance'></InputNumber>
-                    </FormItem>
-                </Col>
-                <Col span="3">
-                    <FormItem label="高速全年">
-                        <InputNumber  disabled="disabled" :value='comboList[9].balance'></InputNumber>
+                        <InputNumber  disabled="disabled" :value='comboList[3].balance'></InputNumber>
                     </FormItem>
                 </Col>
             </Row>
@@ -106,24 +76,22 @@
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
         <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
-        <table-expand  v-model="tableAccountModal" :comboList='comboList' @fatherMethod="fatherMethod"  @on-refresh='handleTableAccount' />
+        <table-expand  v-show="tableAccountModal" :comboList='comboList' @fatherMethod="fatherMethod"  @on-refresh='handleTableAccount' :tableAccountModal='tableAccountModal'/>
         <modify-account v-model="modifyAccountModal" />
     </Card>
 </template>
 <script type="text/babel">
     import * as api from '@/api'
     import page from '@/mixins/page'
-    import Store from './components/store'
     import { datePicker } from '@/config'
     import AddAccount from './components/add-account'
     import TableExpand from './components/table-expand'
     import ModifyAccount from './components/modify-account'
-    import { log } from 'util';
 
     export default {
         name: 'Agent',
         mixins: [ page ],
-        components: {  AddAccount,TableExpand ,ModifyAccount },
+        components: { AddAccount,TableExpand ,ModifyAccount},
         methods: {
             handleAddAccount () {
                 this.addAccountModal = true
@@ -131,41 +99,19 @@
             handleTableAccount () {
                 // this.tableAccountModal = true
                 // alert(this.tableAccountModal)
-                this.tableAccountModal = true
+                this.tableAccountModal = !this.tableAccountModal
                 
             }, 
             handlemodifyAccount () {
                 this.modifyAccountModal = true
-            }, 
+            },                       
             handleFilterQuery () {
                 this.page.current = 1
                 this.getList()
             },
-            handleEditGoods (type = 'add', row = {}) {
-                this.editGoodsModal.show = true
-                this.editGoodsModal.type = type
-                this.editGoodsModal.data = row
-            },
             watchYe(row){
-                console.log(row);
-                return new Promise(async (resolve, reject) =>{
-                    try{
-                        const { current: pageNo, pageSize } = this.page
-                        const { status } = this.filterParams
-                        const adminId = JSON.parse(window.localStorage.getItem("user")).id
-                        const account = row.account
-                        const { count, proxy } = await api.agent.list({
-                            pageNo, pageSize,adminId,status,account
-                        })
-
-                        this.value1 = true;
-                        this.couponYe = row.goodsList
-                    }
-                    catch (e) {
-                        reject(e)
-                    }
-                })
-                
+                this.value1 = true;
+                this.couponYe = row.goodsList
             },
             onAgent(row){
                 return new Promise(async (resolve, reject) => {
@@ -205,6 +151,7 @@
             fatherMethod() {
                this.getList()
             },
+            
             getListData () {
                 return new Promise(async (resolve, reject) => {
                     try {
@@ -215,18 +162,11 @@
                         const { count, proxy } = await api.agent.list({
                             pageNo, pageSize,adminId,status,account
                         })
-
-                        const { code,data,message } = await api.agent.queryCNum({
+                        const { data } = await api.agent.queryCNum({
                             adminId
                         })
-
-                        if (code == 200){
-                            this.comboList = data.sort((a,b)=>{
-                               return a.goods_id -  b.goods_id
-                             });
-                            
-                        } 
-
+                        this.comboList = data 
+                        
                         resolve({
                             data: proxy,
                             meta: {
@@ -241,21 +181,13 @@
         },
         data () {
             return {
-                value1:false,
                 filterParams: {
                     level: '',
                     account: '',
                     status: 2
                 },
+                value1 :false,
                 comboList:[
-                    {
-	            		"balance":0,
-	            		"goods_id":90
-	            	},
-	            	{
-	            		"balance":0,
-	            		"goods_id":95
-	            	},
 	            	{
 	            		"balance":0,
 	            		"goods_id":101
@@ -286,6 +218,7 @@
                     }
                 ]
                 ,
+
                 columns: [
                     {
                         slot:'action',
@@ -331,16 +264,13 @@
                         align: 'center',
                       
                     },
-                ],
-                editGoodsModal: {
-                    show: false,
-                    type: 'add',
-                    data: {}
-                }
+                ]
             }
         },
         mounted () {
+            this.isReady = true
             this.getList()
+            
         }
     }
 </script>
