@@ -16,15 +16,28 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button type="info" @click="addSetMeal">添加套餐记录</Button>
+                        <Button type="info" @click="handleAddAccount">添加套餐记录</Button>
                     </FormItem>
                 </Col>
             </Row>
         </Form>
-        <Table :data="list" :columns="columns" />
+        <Table :data="list" :columns="columns">
+            <template slot-scope="{ row, index }" slot="goodsButton">
+                <!-- <Button type="primary" size="small" style="margin-right: 5px" @click="">启用</Button> -->
+                <!-- <Button type="error" size="small" @click="">禁用</Button> -->
+                <Button type="success" size="small" @click="">编辑</Button>
+            </template>
+            <template slot-scope="{ row, index }" slot="status">
+                    {{row.status == 1?'正常':'禁用'}}
+            </template>
+        </Table>
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
+
+        <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
+        <!-- <add-setmeal v-model="addSetMealModal" @on-refresh="handleFilterQuery" /> -->
+        <!-- <modify-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/> -->
     </Card>
 </template>
 <script type="text/babel">
@@ -33,14 +46,22 @@
     import Store from './components/store'
     import { datePicker } from '@/config'
     import { log } from 'util';
+    import axios from 'axios'
+
+    import AddAccount from './components/add-account'
+    import AddSetMeal from './components/add-setmeal'
+    import modifyAccount from './components/modify-account'
 
     export default {
         name: 'Goods',
         mixins: [ page ],
-        components: {},
+        components: {AddSetMeal,AddAccount,modifyAccount},
         methods: {
             handleAddAccount () {
                 this.addAccountModal = true
+            },
+            handleAddSetMeal () {
+                this.addSetMealModal = true
             },
             handleTableAccount () {
                 this.tableAccountModal = true
@@ -64,7 +85,7 @@
                         const { status,account } = this.filterParams
                         const adminId = JSON.parse(window.localStorage.getItem("user")).id
                         
-                        const { count, proxy } = await api.goods.list({
+                        const { count, goods } = await api.goods.list({
                             pageNo, pageSize,adminId,status,account
                         })
 
@@ -76,11 +97,10 @@
                             this.comboList = data.sort((a,b)=>{
                                return a.goods_id -  b.goods_id
                              });
-                            
                         } 
 
                         resolve({
-                            data: proxy,
+                            data: goods,
                             meta: {
                                 total: count
                             }
@@ -90,18 +110,46 @@
                     }
                 })
             },
-            addSetMeal(){
-                var obj = { "goodsId" : "zhaoliu" , "adminId" : 18,"goodsName" : "zhaoliu" , "buyMinute" : 18,"price" : "zhaoliu" , "priceShow" : 18,"Content" : "zhaoliu"  }
+            setMeal(e){
+                var obj = { goodsId : this.goodsId , adminId : 18  }
                 var str = JSON.stringify(obj)
                 console.log(str);
                 
-                const abc = api.admin.addorupdate(str)
-                console.log(abc);
+
+                
+                let that = this
+                axios({
+                      url: "https://test.jichibang2019.com/api-console/goods/addorupdate", //在线跨域请求
+                      method: "post", //默认是get请求
+                      //   dataType:'JSON',
+                      headers: {
+                        //设置请求头
+                        // "Content-Type": "application/x-www-form-urlencoded",
+                        'token':'000000019DEtx2NGf1adckYbJpjNrkke',
+                        'Access-Control-Allow-Origin':'*',
+                        // "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+                        'Content-Type': 'application/json'
+                      },
+                      data: {
+                        //？search后面的值写在params中
+                        // members_id:e.memberId,pageName:'/console/user',flag:1
+                        obj
+                      }
+                    })
+                    .then(function(val) {
+                      console.log(val); // axios会对我们请求来的结果进行再一次的封装（ 让安全性提高 ）
+                      that.handleFilterQuery()
+                    })
+                    .catch(function(err) {
+                      console.log(err);
+                    });
             }
 
         },
         data () {
             return {
+                goodsId:"1234",
+                adminId:1,
                 value1:false,
                 filterParams: {
                     level: '',
@@ -133,49 +181,21 @@
 	            		"balance":0,
 	            		"goods_id":104
 	            	}
-	            ],
-                addAccountModal: false,
+                ],
+                addAccountModal:false,
+                addSetMealModal: false,
                 tableAccountModal:false,
                 modifyAccountModal: false,
 
                 columns: [
-                    {
-                        key: 'proxyLevel',
-                        title: '代理级别',
-                        align: 'center',
-                        minWidth: 100
-                    },
-                    {
-                        key: 'status',
-                        title: '账号状态(1)正常(0)禁用',
-                        width: 200,
-                        align: 'center'
-                    },
-                    {
-                        key: 'proxyName',
-                        title: '代理商',
-                        align: 'center',
-                        minWidth: 100
-                    },
-                    {
-                        key: 'proxyId',
-                        title: '代理ID',
-                        align: 'center',
-                        minWidth: 100
-                    },
-                    {
-                        key: 'loginAccount',
-                        title: '账号',
-                        align: 'center',
-                        width: 200
-                    },
-                    {
-                        slot:'goodsButton',
-                        key: 'goodsButton',
-                        title: '套餐',
-                        align: 'center',
-                      
-                    },
+                    { slot:'goodsButton',title: '套餐启用/禁用',align: 'center',fixed: 'left',width: 200},
+                    { slot: 'status',title: '账号状态',width: 200,align: 'center'},
+                    { key: 'goodsName',title: '套餐类型',align: 'center',minWidth: 100},
+                    { key: 'goodsId',title: '套餐ID',align: 'center',minWidth: 100},
+                    { key: 'content',title: '套餐描述',align: 'center',width: 250},
+                    { key: 'price',title: '现价',align: 'center',width: 100},
+                    { key: 'priceShow',title: '原价',align: 'center',width: 100},
+    
                 ],
                 editGoodsModal: {
                     show: false,

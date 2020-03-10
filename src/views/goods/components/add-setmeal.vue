@@ -5,21 +5,18 @@
         <Form ref="form"
               :model="params" :rules="rules" :label-width="140"
               @submit.native.prevent>
-            <FormItem prop="account" label="商品名称">
+            <FormItem prop="account" label="账号">
                 <Input clearable type="text" placeholder="请输入账号" :maxlength="32" v-model="params.account" @on-enter="handleSubmitForm"/>
             </FormItem>
-            <FormItem prop="password" label="购买分钟数">
-                <Input clearable type="text" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.password" @on-enter="handleSubmitForm" />
+            <FormItem prop="password" label="密码">
+                <Input clearable type="password" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.password" @on-enter="handleSubmitForm" />
             </FormItem>
-            <FormItem prop="realname" label="原价">
+            <FormItem prop="realname" label="代理名称">
                 <Input clearable type="text" placeholder="请输代理名称" v-model="params.proxyName" @on-enter="handleSubmitForm"/>
             </FormItem>
-            <FormItem  prop="agentId" label="销售价格">
+            <FormItem  label="渠道码">
                 <Input clearable type="text" placeholder="请输入渠道码" v-model="params.channelCode" @on-enter="handleSubmitForm"/>
-            </FormItem>  
-            <FormItem  prop="phone" label="商品描述">
-                <Input clearable type="text" placeholder="请输入渠道码" v-model="params.content" @on-enter="handleSubmitForm"/>
-            </FormItem>                           
+            </FormItem>                        
         </Form>
         <div slot="footer">
             <Button type="text" @click="show = false">取消</Button>
@@ -32,7 +29,7 @@
     import { phone } from '@/libs/validator'
 
     export default {
-        name: 'AddAccount',
+        name: 'AddSetMeal',
         props: {
             value: {
                 type: Boolean,
@@ -80,13 +77,12 @@
                     password: '',
                     proxyName: '',
                     channelCode:'',
-                    adminId:'',
-                    content:''
+                    adminId:''
                 },
                 rules: {
                     phone: [
                         { required: true, message: '请输入手机号码', trigger: 'change blur' },
-                        { pattern: phone, message: '请输入正确的手机号码',min:11}
+                        { pattern: phone, message: '请输入正确的手机号码' }
                     ],
                     account: [
                         { required: true, message: '请输入用户名', trigger: 'change blur' },

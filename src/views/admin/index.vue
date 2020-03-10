@@ -21,7 +21,16 @@
                 </Col>
             </Row>
         </Form>
-        <Table :data="list" :columns="columns" />
+        <Table :data="list" :columns="columns" >
+            <template slot-scope="{ row, index }" slot="goodsButton">
+                <!-- <Button type="primary" size="small" style="margin-right: 5px" @click="">启用</Button> -->
+                <!-- <Button type="error" size="small" @click="">禁用</Button> -->
+                <Button type="success" size="small" @click="">编辑</Button>
+            </template>
+            <template slot-scope="{ row, index }" slot="status">
+                    {{row.status == 1?'正常':'禁用'}}
+            </template>
+        </Table>
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
@@ -63,13 +72,14 @@
                         const { current: pageNo, pageSize } = this.page
                         const { status,account } = this.filterParams
                         const adminId = JSON.parse(window.localStorage.getItem("user")).id
-                        
-                        const { count, proxy } = await api.admin.list({
-                            pageNo, pageSize,adminId,status,account
+                        const password = 123456
+
+                        const { count, adminList } = await api.admin.list({
+                           pageNo, pageSize 
                         })
 
                         const { code,data,message } = await api.agent.queryCNum({
-                            adminId
+                            adminId,
                         })
 
                         if (code == 200){
@@ -80,7 +90,7 @@
                         } 
 
                         resolve({
-                            data: proxy,
+                            data: adminList,
                             meta: {
                                 total: count
                             }
@@ -105,7 +115,7 @@
                 value1:false,
                 filterParams: {
                     level: '',
-                    account: '',
+                    account: 1,
                     status: 2
                 },
                 comboList:[
@@ -140,26 +150,20 @@
 
                 columns: [
                     {
-                        key: 'proxyLevel',
-                        title: '代理级别',
-                        align: 'center',
-                        minWidth: 100
-                    },
-                    {
-                        key: 'status',
-                        title: '账号状态(1)正常(0)禁用',
+                        slot: 'status',
+                        title: '账号状态',
                         width: 200,
                         align: 'center'
                     },
                     {
-                        key: 'proxyName',
+                        key: 'adminId',
                         title: '代理商',
                         align: 'center',
                         minWidth: 100
                     },
                     {
-                        key: 'proxyId',
-                        title: '代理ID',
+                        key: 'timeLogin',
+                        title: '最后登录时间',
                         align: 'center',
                         minWidth: 100
                     },
@@ -169,13 +173,7 @@
                         align: 'center',
                         width: 200
                     },
-                    {
-                        slot:'goodsButton',
-                        key: 'goodsButton',
-                        title: '套餐',
-                        align: 'center',
-                      
-                    },
+                    { slot:'goodsButton',title: '套餐启用/禁用',align: 'center',fixed: 'left',width: 200},
                 ],
                 editGoodsModal: {
                     show: false,

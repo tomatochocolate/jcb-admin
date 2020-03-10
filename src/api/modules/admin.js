@@ -3,7 +3,7 @@
  */
 import instance from '@/api/http'
 
-const module = '/goods'
+const module = '/admin'
 export const store = (params) => {
     return instance.post('/goods', params)
 }
@@ -15,7 +15,7 @@ export const update = (params) => {
  * @returns { Promise }
  */
 export const list = (params) => {
-    return instance.post(`${module}/list`, params)
+    return instance.post(`${module}/adminlist`, params)
 }
 /**
  * 添加套餐
