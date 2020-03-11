@@ -1,116 +1,17 @@
 <template>
-    <Modal mask-closable scrollable title="分配代理卡券余额"
+    <Modal mask-closable scrollable title="添加用户套餐记录"
            :width="500" :loading="isSubmit"
            v-model="show">
         <Form ref="form" :model="params" :rules="rules" :label-width="90"
               @submit.native.prevent>
               
-            <FormItem prop="status" label="">
-                        <!-- <Select clearable placeholder="填写ID" v-model="params.proxyId" style="width:100px"  filterable>
-                            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.value }}</Option>
-                        </Select> -->
-             <Input clearable type="text" placeholder="请填写代理ID" :maxlength="32" v-model="params.proxyId" style="width: 100px" />           
+            <FormItem prop="status" label="用户ID">
+                <Input clearable type="text" placeholder="请填写用户ID" :maxlength="32" v-model="params.proxyId" style="width: 100px" />           
             </FormItem>
-            <FormItem  label="7天套餐">
-                <InputNumber
-                    :max="comboList[0].balance"
-                    :min="0"
-                    v-model="params.weekNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[0].balance'style="margin-left:100px"></InputNumber>
+            <FormItem prop="password" label="套餐ID">
+                <Input clearable type="password" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.password" @on-enter="showChange" />
             </FormItem>
-            <FormItem  label="15天套餐">
-                <InputNumber
-                    :max="comboList[1].balance"
-                    :min="0"
-                    v-model="params.halfMonthNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[1].balance'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="月套餐">
-                <InputNumber
-                    :max="comboList[2].balance"
-                    :min="0"
-                    v-model="params.monthNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[2].balance'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="季度套餐">
-                <InputNumber
-                    :max="comboList[3].balance"
-                    :min="0"
-                    v-model="params.seasonNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[3].balance'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="半年套餐">
-                <InputNumber
-                    :max="comboList[4].balance"
-                    :min="0"
-                    v-model="params.halfYearNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[4].balance'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="全年套餐">
-                <InputNumber
-                    :max="comboList[5].balance"
-                    :min="0"
-                    v-model="params.yearNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[5].balance'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="高速包月">
-                <InputNumber
-                    :max="comboList[6].balance"
-                    :min="0"
-                    v-model="params.HmonthNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[6].balance'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="高速季度">
-                <InputNumber
-                    :max="comboList[7].balance"
-                    :min="0"
-                    v-model="params.HseasonNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[7].balance'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="高速半年">
-                <InputNumber
-                    :max="comboList[8].balance"
-                    :min="0"
-                    v-model="params.HhalfYearNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[8].balance'style="margin-left:100px"></InputNumber>
-            </FormItem>
-            <FormItem  label="高速全年">
-                <InputNumber
-                    :max="comboList[9].balance"
-                    :min="0"
-                    v-model="params.HyearNum"
-                    :formatter="value => `${value}`"
-                    :parser="value => value.replace(/[\s\.]/, '')">
-                </InputNumber>
-                <InputNumber  disabled="disabled" :value='comboList[9].balance'style="margin-left:100px"></InputNumber>
-            </FormItem>
+           
         </Form>
         <div slot="footer">
             <Button type="text" @click="show = false">取消</Button>

@@ -16,7 +16,9 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button type="info" @click="addSetMeal">添加套餐记录</Button>
+                        <Button type="info" @click="handleAddAccount">添加管理员</Button>
+                        <Button type="info" @click="handleTableAccount">添加用户套餐记录</Button>
+                        <Button type="info" @click="handlemodifyAccount">代理商账号补充</Button>
                     </FormItem>
                 </Col>
             </Row>
@@ -34,6 +36,10 @@
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
+
+        <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
+        <table-expand  v-model="tableAccountModal"   @on-refresh='handleTableAccount' />
+        <modify-account v-model="modifyAccountModal" />
     </Card>
 </template>
 <script type="text/babel">
@@ -43,10 +49,14 @@
     import { datePicker } from '@/config'
     import { log } from 'util';
 
+    import AddAccount from './components/add-account'
+    import TableExpand from './components/table-expand'
+    import ModifyAccount from './components/modify-account'
+
     export default {
         name: 'Admin',
         mixins: [ page ],
-        components: {},
+        components: {AddAccount,TableExpand,ModifyAccount},
         methods: {
             handleAddAccount () {
                 this.addAccountModal = true

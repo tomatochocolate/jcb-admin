@@ -1,5 +1,5 @@
 <template>
-    <Modal mask-closable scrollable title="新增代理商"
+    <Modal mask-closable scrollable title="添加管理员"
            :width="500" :loading="isSubmit"
            v-model="show">
         <Form ref="form"
@@ -11,12 +11,6 @@
             <FormItem prop="password" label="密码">
                 <Input clearable type="password" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.password" @on-enter="handleSubmitForm" />
             </FormItem>
-            <FormItem prop="realname" label="代理名称">
-                <Input clearable type="text" placeholder="请输代理名称" v-model="params.proxyName" @on-enter="handleSubmitForm"/>
-            </FormItem>
-            <FormItem  label="渠道码">
-                <Input clearable type="text" placeholder="请输入渠道码" v-model="params.channelCode" @on-enter="handleSubmitForm"/>
-            </FormItem>                        
         </Form>
         <div slot="footer">
             <Button type="text" @click="show = false">取消</Button>

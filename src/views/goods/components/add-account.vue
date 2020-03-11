@@ -5,19 +5,22 @@
         <Form ref="form"
               :model="params" :rules="rules" :label-width="140"
               @submit.native.prevent>
+            <FormItem prop="account" label="套餐ID">
+                <Input clearable type="text" placeholder="请输入套餐ID" :maxlength="32" v-model="params.account" @on-enter="handleSubmitForm"/>
+            </FormItem>
             <FormItem prop="account" label="商品名称">
                 <Input clearable type="text" placeholder="请输入账号" :maxlength="32" v-model="params.account" @on-enter="handleSubmitForm"/>
             </FormItem>
-            <FormItem prop="password" label="购买分钟数">
-                <Input clearable type="text" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.password" @on-enter="handleSubmitForm" />
+            <FormItem prop="buyMinute" label="购买分钟数">
+                <Input clearable type="text" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.buyMinute" @on-enter="handleSubmitForm" />
             </FormItem>
-            <FormItem prop="realname" label="原价">
-                <Input clearable type="text" placeholder="请输代理名称" v-model="params.proxyName" @on-enter="handleSubmitForm"/>
+            <FormItem prop="priceShow" label="原价">
+                <Input clearable type="text" placeholder="请输代理名称" v-model="params.priceShow" @on-enter="handleSubmitForm"/>
             </FormItem>
-            <FormItem  prop="agentId" label="销售价格">
-                <Input clearable type="text" placeholder="请输入渠道码" v-model="params.channelCode" @on-enter="handleSubmitForm"/>
+            <FormItem  prop="price" label="销售价格">
+                <Input clearable type="text" placeholder="请输入渠道码" v-model="params.price" @on-enter="handleSubmitForm"/>
             </FormItem>  
-            <FormItem  prop="phone" label="商品描述">
+            <FormItem  prop="content" label="商品描述">
                 <Input clearable type="text" placeholder="请输入渠道码" v-model="params.content" @on-enter="handleSubmitForm"/>
             </FormItem>                           
         </Form>
@@ -81,7 +84,8 @@
                     proxyName: '',
                     channelCode:'',
                     adminId:'',
-                    content:''
+                    content:'',
+                    agentId:''
                 },
                 rules: {
                     phone: [
@@ -96,7 +100,10 @@
                         { required: true, message: '请输入密码', trigger: 'change blur' },
                         { min: 6, max: 16, message: '请输入6~16位的密码' }
                     ],
-                    agentId: { required: true, message: '请选择代理商', trigger: 'change blur' }
+                    agentId: [
+                        { required: true, message: '请输入用户名', trigger: 'change blur' },
+                        { min: 2, message: '用户名最少2位字符' }
+                    ],
                 },
 
                 isSubmit: false

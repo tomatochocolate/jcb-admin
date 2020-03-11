@@ -25,7 +25,7 @@
             <template slot-scope="{ row, index }" slot="goodsButton">
                 <!-- <Button type="primary" size="small" style="margin-right: 5px" @click="">启用</Button> -->
                 <!-- <Button type="error" size="small" @click="">禁用</Button> -->
-                <Button type="success" size="small" @click="">编辑</Button>
+                <Button type="success" size="small" @click="setMeal">编辑</Button>
             </template>
             <template slot-scope="{ row, index }" slot="status">
                     {{row.status == 1?'正常':'禁用'}}
@@ -111,15 +111,12 @@
                 })
             },
             setMeal(e){
-                var obj = { goodsId : this.goodsId , adminId : 18  }
+                var obj = { goodsId : 123 , adminId : 1  }
                 var str = JSON.stringify(obj)
-                console.log(str);
-                
-
                 
                 let that = this
                 axios({
-                      url: "https://test.jichibang2019.com/api-console/goods/addorupdate", //在线跨域请求
+                      url: "http://192.168.0.160:9988/api-console/goods/addorupdate", //在线跨域请求
                       method: "post", //默认是get请求
                       //   dataType:'JSON',
                       headers: {
@@ -133,7 +130,7 @@
                       data: {
                         //？search后面的值写在params中
                         // members_id:e.memberId,pageName:'/console/user',flag:1
-                        obj
+                        goodsId : 123 , adminId : 1
                       }
                     })
                     .then(function(val) {
