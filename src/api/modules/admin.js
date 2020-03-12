@@ -42,3 +42,10 @@ export const add = (params) => {
 export const update = (params) => {
     return instance.post(`${module}/update`, params)
 }
+/**
+ * 修改密码
+ * @returns { Promise }
+ */
+export const modifyPassword = (params) => {
+    return instance.post(`${module}/modifyPassword`, params)
+}

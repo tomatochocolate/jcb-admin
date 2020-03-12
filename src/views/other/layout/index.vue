@@ -29,7 +29,7 @@
                                 <Icon type="md-arrow-dropdown"></Icon>
                             </a>
                             <DropdownMenu  slot="list">
-                                <DropdownItem name="logout" ><BUtton @click="change">修改密码</BUtton></DropdownItem>
+                                <DropdownItem name="logout" ><BUtton @click="handleAddAccount">修改密码</BUtton></DropdownItem>
                                 <DropdownItem name="logout" ><BUtton @click="outLogin">退出登录</BUtton></DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
@@ -42,6 +42,7 @@
                     <keep-alive :include="caches"><router-view /></keep-alive>
                 </transition>
             </Content>
+            <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
         </Layout>
     </Layout>
 </template>
@@ -54,6 +55,7 @@
     import TagsNav from './components/tags-nav'
     import FullScreen from './components/fullscreen'
     import ShrinkableMenu from './components/shrinkable-menu'
+    import AddAccount from './components/add-account'
 
     export default {
         name: 'AppRootLayout',
@@ -68,13 +70,16 @@
         computed: mapGetters('app', [
             'user', 'menus', 'routes', 'caches', 'openNames', 'activeName', 'breadcrumbs', 'tagsList'
         ]),
-        components: { TagsNav, FullScreen, ShrinkableMenu },
+        components: { TagsNav, FullScreen, ShrinkableMenu,AddAccount },
         methods: {
             ...mapActions('app', [ 'logout', 'addTags', 'removeTags' ]),
             ...mapActions('app', {
                 setMenus: 'menus',
                 setCurrentRoute: 'currentRoute'
             }),
+            handleAddAccount () {
+                this.addAccountModal = true
+            },
             change(){
                     console.log('change');
                     
@@ -87,9 +92,6 @@
                 localStorage.removeItem("token");
                 localStorage.removeItem(tagL);
                 this.$router.push("/login");
-                
-                
-                
                 
             },
             breadcrumbTo (to, index = 0, breadcrumbs) {
@@ -123,7 +125,8 @@
         data () {
             return {
                 shrink: false,
-                isFullscreen: false
+                isFullscreen: false,
+                addAccountModal: false,
             }
         },
         created () {
