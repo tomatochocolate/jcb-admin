@@ -46,7 +46,7 @@
                 this.isSubmit = true
                 try {
                     
-                    const { code, message } = await api.agent.add(this.params)
+                    const { code, message } = await api.admin.add(this.params)
 
                     this.isSubmit = false
                     if (code !== 200) {
@@ -69,9 +69,9 @@
                 params: {
                     account: '',
                     password: '',
-                    proxyName: '',
-                    channelCode:'',
-                    adminId:''
+                    // proxyName: '',
+                    // channelCode:'',
+                    // adminId:''
                 },
                 rules: {
                     phone: [
@@ -93,7 +93,7 @@
             }
         },
         mounted(){
-            this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
+            // this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
         }
     }
 </script>

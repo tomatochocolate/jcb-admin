@@ -167,7 +167,7 @@
                     },
                     {
                         key: 'adminId',
-                        title: '代理商',
+                        title: '管理员ID',
                         align: 'center',
                         minWidth: 100
                     },
@@ -183,7 +183,7 @@
                         align: 'center',
                         width: 200
                     },
-                    { slot:'goodsButton',title: '套餐启用/禁用',align: 'center',fixed: 'left',width: 200},
+                    // { slot:'goodsButton',title: '操作管理员',align: 'center',fixed: 'left',width: 200},
                 ],
                 editGoodsModal: {
                     show: false,

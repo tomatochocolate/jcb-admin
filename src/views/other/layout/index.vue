@@ -29,6 +29,7 @@
                                 <Icon type="md-arrow-dropdown"></Icon>
                             </a>
                             <DropdownMenu  slot="list">
+                                <DropdownItem name="logout" ><BUtton @click="change">修改密码</BUtton></DropdownItem>
                                 <DropdownItem name="logout" ><BUtton @click="outLogin">退出登录</BUtton></DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
@@ -74,6 +75,10 @@
                 setMenus: 'menus',
                 setCurrentRoute: 'currentRoute'
             }),
+            change(){
+                    console.log('change');
+                    
+            },
             outLogin(){
                 var tagNumber = JSON.parse(window.localStorage.getItem("user")).id
                 var tagL = 'tagsList:'+tagNumber

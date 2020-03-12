@@ -7,20 +7,38 @@ const module = '/admin'
 export const store = (params) => {
     return instance.post('/goods', params)
 }
-export const update = (params) => {
-    return instance.post('/goods/update', params)
-}
 /**
- * 查询所有套餐列表
+ * 查询所有管理员列表
  * @returns { Promise }
  */
 export const list = (params) => {
     return instance.post(`${module}/adminlist`, params)
 }
 /**
- * 添加套餐
+ *补充代理商账号
  * @returns { Promise }
  */
-export const addorupdate = (params) => {
-    return instance.post(`${module}/addorupdate`, params)
+export const proxysupplement = (params) => {
+    return instance.post(`${module}/proxysupplement`, params)
+}
+/**
+ * 添加用户套餐记录
+ * @returns { Promise }
+ */
+export const membersupplement = (params) => {
+    return instance.post(`${module}/membersupplement`, params)
+}
+/**
+ * 添加管理员
+ * @returns { Promise }
+ */
+export const add = (params) => {
+    return instance.post(`${module}/add`, params)
+}
+/**
+ * 管理员编辑
+ * @returns { Promise }
+ */
+export const update = (params) => {
+    return instance.post(`${module}/update`, params)
 }

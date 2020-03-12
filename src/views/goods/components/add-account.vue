@@ -1,18 +1,24 @@
 <template>
-    <Modal mask-closable scrollable title="新增代理商"
+    <Modal mask-closable scrollable title="添加套餐"
            :width="500" :loading="isSubmit"
            v-model="show">
         <Form ref="form"
               :model="params" :rules="rules" :label-width="140"
               @submit.native.prevent>
-            <FormItem prop="account" label="套餐ID">
-                <Input clearable type="text" placeholder="请输入套餐ID" :maxlength="32" v-model="params.account" @on-enter="handleSubmitForm"/>
+            <FormItem prop="goodsId" label="套餐ID">
+                <Input clearable type="text" placeholder="请输入套餐ID" :maxlength="32" v-model="params.goodsId" @on-enter="handleSubmitForm"/>
             </FormItem>
-            <FormItem prop="account" label="商品名称">
-                <Input clearable type="text" placeholder="请输入账号" :maxlength="32" v-model="params.account" @on-enter="handleSubmitForm"/>
+            <FormItem prop="goodsName" label="商品名称">
+                <Input clearable type="text" placeholder="请输入账号" :maxlength="32" v-model="params.goodsName" @on-enter="handleSubmitForm"/>
             </FormItem>
-            <FormItem prop="buyMinute" label="购买分钟数">
-                <Input clearable type="text" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.buyMinute" @on-enter="handleSubmitForm" />
+            <FormItem  prop="goodsType" label="套餐类型">
+                <Select clearable placeholder="时长单位" v-model="params.goodsType" style="width:150px">
+                            <Option value="1">包时（天）</Option>
+                            <Option value="2">流量（G）</Option>
+                        </Select>
+            </FormItem>  
+            <FormItem prop="buyMinute" label="套餐数值">
+                <Input clearable type="text" placeholder="输入对应套餐数值" :maxlength="16" v-model="params.buyMinute" @on-enter="handleSubmitForm" />
             </FormItem>
             <FormItem prop="priceShow" label="原价">
                 <Input clearable type="text" placeholder="请输代理名称" v-model="params.priceShow" @on-enter="handleSubmitForm"/>
@@ -22,7 +28,7 @@
             </FormItem>  
             <FormItem  prop="content" label="商品描述">
                 <Input clearable type="text" placeholder="请输入渠道码" v-model="params.content" @on-enter="handleSubmitForm"/>
-            </FormItem>                           
+            </FormItem>
         </Form>
         <div slot="footer">
             <Button type="text" @click="show = false">取消</Button>
@@ -33,6 +39,7 @@
 <script type="text/babel">
     import * as api from '@/api'
     import { phone } from '@/libs/validator'
+    import axios from 'axios'
 
     export default {
         name: 'AddAccount',
@@ -52,14 +59,50 @@
             }
         },
         methods:{
+            setMeal(e){
+                var obj = { goodsId : 123 , adminId : 1  }
+                var str = JSON.stringify(obj)
+                
+                let that = this
+                axios({
+                      url: "http://192.168.0.160:9988/api-console/goods/addorupdate", //在线跨域请求
+                      method: "post", //默认是get请求
+                      //   dataType:'JSON',
+                      headers: {
+                        //设置请求头
+                        // "Content-Type": "application/x-www-form-urlencoded",
+                        'token':'000000019DEtx2NGf1adckYbJpjNrkke',
+                        'Access-Control-Allow-Origin':'*',
+                        // "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+                        'Content-Type': 'application/json'
+                      },
+                      data: {
+                        //？search后面的值写在params中
+                        // members_id:e.memberId,pageName:'/console/user',flag:1
+                        goodsId : this.params.goodsId ,goodsName : this.params.goodsName ,
+                        buyMinute : this.params.buyMinute ,priceShow : this.params.priceShow ,
+                        price : this.params.price ,content : this.params.content ,
+                        adminId : this.params.adminId ,status : this.params.status ,
+                        goodsType : this.params.goodsType
+                      }
+                    })
+                    .then(function(val) {
+                      console.log(val); // axios会对我们请求来的结果进行再一次的封装（ 让安全性提高 ）
+                      return val
+                    })
+                    .catch(function(err) {
+                      console.log(err);
+                    });
+            },
             async handleSubmitForm () {
                 if (!await this.$refs.form.validate() || this.isSubmit) return
                 
                 this.isSubmit = true
                 try {
                     
-                    const { code, message } = await api.agent.add(this.params)
-
+                    const abc = await this.setMeal(this.params)
+                    console.log(abc);
+                    const code = 200
                     this.isSubmit = false
                     if (code !== 200) {
                         this.$Message.error(message)
@@ -73,36 +116,47 @@
                     this.$Message.error(e.message)
                 }
             },
+            
         },
 
         data () {
             return {
                 show: this.value,
                 params: {
-                    account: '',
-                    password: '',
-                    proxyName: '',
-                    channelCode:'',
                     adminId:'',
+                    goodsId: '',
+                    goodsName: '',
+                    buyMinute: '',
+                    priceShow:'',
+                    price:'',
                     content:'',
-                    agentId:''
+                    status:1,
+                    goodsType:'',
                 },
                 rules: {
-                    phone: [
-                        { required: true, message: '请输入手机号码', trigger: 'change blur' },
-                        { pattern: phone, message: '请输入正确的手机号码',min:11}
+                    goodsId: [
+                        { required: true, message: '请输入套餐ID', trigger: 'change blur' },
+                        { min: 2, message: '套餐ID最少2位数字' }
                     ],
-                    account: [
-                        { required: true, message: '请输入用户名', trigger: 'change blur' },
-                        { min: 2, message: '用户名最少2位字符' }
+                    goodsName: [
+                        { required: true, message: '请输入套餐名称', trigger: 'change blur' },
+                        { min: 4, max: 16, message: '请输入至少四个字符' }
                     ],
-                    password: [
-                        { required: true, message: '请输入密码', trigger: 'change blur' },
-                        { min: 6, max: 16, message: '请输入6~16位的密码' }
+                    buyMinute: [
+                        { required: true, message: '请输入套餐时间', trigger: 'change blur' },
+                        {  max: 16, message: '请输入套餐时间' }
                     ],
-                    agentId: [
-                        { required: true, message: '请输入用户名', trigger: 'change blur' },
-                        { min: 2, message: '用户名最少2位字符' }
+                    priceShow: [
+                        { required: true, message: '请输入原价', trigger: 'change blur' },
+                        {  max: 16, message: '请输入正确格式' }
+                    ],
+                    price: [
+                        { required: true, message: '请输入售价', trigger: 'change blur' },
+                        {  max: 16, message: '请输入正确格式' }
+                    ],
+                    content: [
+                        { required: true, message: '请输入套餐内容介绍', trigger: 'change blur' },
+                        { min: 6,  message: '请输入不少于6个字符的内容' }
                     ],
                 },
 

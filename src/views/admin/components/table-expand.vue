@@ -5,11 +5,11 @@
         <Form ref="form" :model="params" :rules="rules" :label-width="90"
               @submit.native.prevent>
               
-            <FormItem prop="status" label="用户ID">
-                <Input clearable type="text" placeholder="请填写用户ID" :maxlength="32" v-model="params.proxyId" style="width: 100px" />           
+            <FormItem prop="memberId" label="用户ID">
+                <Input clearable type="text" placeholder="请填写用户ID" :maxlength="32" v-model="params.memberId" style="width: 100px" />           
             </FormItem>
-            <FormItem prop="password" label="套餐ID">
-                <Input clearable type="password" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.password" @on-enter="showChange" />
+            <FormItem prop="goodsId" label="套餐ID">
+                <Input clearable type="text" placeholder="请输入套餐ID" :maxlength="32" v-model="params.goodsId" @on-enter="showChange" style="width: 100px" />
             </FormItem>
            
         </Form>
@@ -58,7 +58,7 @@
                 this.isSubmit = true
                 try {
                     
-                    const { code, message } = await api.agent.planCNum(this.params)
+                    const { code, message } = await api.admin.membersupplement(this.params)
 
                     this.isSubmit = false
                     if (code !== 200) {
@@ -79,18 +79,8 @@
             return {
                 show: this.value,
                 params: {
-                    proxyId: '',
-                    adminId:'',
-                    weekNum:0,
-                    halfMonthNum:0,
-                    monthNum:0,
-                    seasonNum:0,
-                    halfYearNum:0,
-                    yearNum:0,
-                    HmonthNum:0,
-                    HseasonNum:0,
-                    HhalfYearNum:0,
-                    HyearNum:0
+                   memberId:'',
+                   goodsId:''
                 },
                 cityList: [
                     {
@@ -132,7 +122,7 @@
             }
         },
         mounted(){
-            this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
+            // this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
         }
     }
 </script>

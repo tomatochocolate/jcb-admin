@@ -16,7 +16,7 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button type="info" @click="handleAddAccount">添加套餐记录</Button>
+                        <Button type="info" @click="handleAddAccount">添加套餐</Button>
                     </FormItem>
                 </Col>
             </Row>
@@ -25,10 +25,13 @@
             <template slot-scope="{ row, index }" slot="goodsButton">
                 <!-- <Button type="primary" size="small" style="margin-right: 5px" @click="">启用</Button> -->
                 <!-- <Button type="error" size="small" @click="">禁用</Button> -->
-                <Button type="success" size="small" @click="setMeal">编辑</Button>
+                <Button type="success" size="small" @click="handlemodifyAccount(row)">修改套餐</Button>
             </template>
             <template slot-scope="{ row, index }" slot="status">
                     {{row.status == 1?'正常':'禁用'}}
+            </template>
+            <template slot-scope="{ row, index }" slot="goodsType">
+                    {{row.goodsType == 1?'包时':'流量'}}
             </template>
         </Table>
         <Page style="margin-top: 15px;"
@@ -37,7 +40,7 @@
 
         <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
         <!-- <add-setmeal v-model="addSetMealModal" @on-refresh="handleFilterQuery" /> -->
-        <!-- <modify-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/> -->
+        <modify-account v-model="modifyAccountModal" @on-refresh="handleFilterQuery" :modifyparams='modifyparams'/>
     </Card>
 </template>
 <script type="text/babel">
@@ -66,8 +69,11 @@
             handleTableAccount () {
                 this.tableAccountModal = true
             }, 
-            handlemodifyAccount () {
+            handlemodifyAccount (row) {
                 this.modifyAccountModal = true
+                this.modifyparams = row
+                console.log(this.modifyparams);
+                
             }, 
             handleFilterQuery () {
                 this.page.current = 1
@@ -145,13 +151,23 @@
         },
         data () {
             return {
-                goodsId:"1234",
-                adminId:1,
+                goodId:"",
                 value1:false,
                 filterParams: {
                     level: '',
                     account: '',
                     status: 2
+                },
+                modifyparams: {
+                    adminId:1,
+                    goodsId: 1,
+                    goodsName: 1,
+                    buyMinute: 1,
+                    priceShow:1,
+                    price:1,
+                    content:1,
+                    status:1,
+                    goodsType:1,
                 },
                 comboList:[
                     {
@@ -191,6 +207,7 @@
                     { key: 'goodsId',title: '套餐ID',align: 'center',minWidth: 100},
                     { key: 'content',title: '套餐描述',align: 'center',width: 250},
                     { key: 'price',title: '现价',align: 'center',width: 100},
+                    { slot: 'goodsType',title: '套餐类型',align: 'center',width: 100},
                     { key: 'priceShow',title: '原价',align: 'center',width: 100},
     
                 ],
