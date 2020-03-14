@@ -1,5 +1,5 @@
 <template>
-    <Card class="list" v-if="isReady">
+    <Card class="list" v-if="adminId == 1">
         <Form ref="form" inline :model="filterParams" @submit.native.prevent>
             <Row type="flex">
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
@@ -167,6 +167,7 @@
 
         data () {
             return {
+                adminId:'',
                 filterParams: {
                     id: '',
                     phone: '',
@@ -213,7 +214,7 @@
         },
         mounted () {
             this.getList();
-            
+            this.adminId = JSON.parse(window.localStorage.getItem("user")).id
         }
     }
 </script>

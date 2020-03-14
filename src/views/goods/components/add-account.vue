@@ -9,25 +9,31 @@
                 <Input clearable type="text" placeholder="请输入套餐ID" :maxlength="32" v-model="params.goodsId" @on-enter="handleSubmitForm"/>
             </FormItem>
             <FormItem prop="goodsName" label="商品名称">
-                <Input clearable type="text" placeholder="请输入账号" :maxlength="32" v-model="params.goodsName" @on-enter="handleSubmitForm"/>
+                <Input clearable type="text" placeholder="请输入商品名称" :maxlength="32" v-model="params.goodsName" @on-enter="handleSubmitForm"/>
             </FormItem>
-            <FormItem  prop="goodsType" label="套餐类型">
+            <!-- <FormItem  prop="goodsType" label="套餐类型">
                 <Select clearable placeholder="时长单位" v-model="params.goodsType" style="width:150px">
                             <Option value="1">包时（天）</Option>
                             <Option value="2">流量（G）</Option>
                         </Select>
-            </FormItem>  
+            </FormItem>  -->
+            <FormItem prop="" label="套餐类型1">
+                <RadioGroup v-model="params.goodsType"  size="large">
+                    <Radio label='1'>包时（天）</Radio>
+                    <Radio label='2'>流量（G）</Radio>
+                </RadioGroup>
+            </FormItem>
             <FormItem prop="buyMinute" label="套餐数值">
                 <Input clearable type="text" placeholder="输入对应套餐数值" :maxlength="16" v-model="params.buyMinute" @on-enter="handleSubmitForm" />
             </FormItem>
             <FormItem prop="priceShow" label="原价">
-                <Input clearable type="text" placeholder="请输代理名称" v-model="params.priceShow" @on-enter="handleSubmitForm"/>
+                <Input clearable type="text" placeholder="请输入原价" v-model="params.priceShow" @on-enter="handleSubmitForm"/>
             </FormItem>
             <FormItem  prop="price" label="销售价格">
-                <Input clearable type="text" placeholder="请输入渠道码" v-model="params.price" @on-enter="handleSubmitForm"/>
+                <Input clearable type="text" placeholder="请输入销售价格" v-model="params.price" @on-enter="handleSubmitForm"/>
             </FormItem>  
             <FormItem  prop="content" label="商品描述">
-                <Input clearable type="text" placeholder="请输入渠道码" v-model="params.content" @on-enter="handleSubmitForm"/>
+                <Input clearable type="text" placeholder="请输入商品描述" v-model="params.content" @on-enter="handleSubmitForm"/>
             </FormItem>
         </Form>
         <div slot="footer">
@@ -65,7 +71,7 @@
                 
                 let that = this
                 axios({
-                      url: "http://192.168.0.160:9988/api-console/goods/addorupdate", //在线跨域请求
+                      url: "/api-console/goods/addorupdate", //在线跨域请求
                       method: "post", //默认是get请求
                       //   dataType:'JSON',
                       headers: {
@@ -83,7 +89,7 @@
                         buyMinute : this.params.buyMinute ,priceShow : this.params.priceShow ,
                         price : this.params.price ,content : this.params.content ,
                         adminId : this.params.adminId ,status : this.params.status ,
-                        goodsType : this.params.goodsType
+                        goodsType : this.params.goodsType *1
                       }
                     })
                     .then(function(val) {
@@ -121,6 +127,7 @@
 
         data () {
             return {
+                phone: 'apple',
                 show: this.value,
                 params: {
                     adminId:'',
@@ -131,7 +138,7 @@
                     price:'',
                     content:'',
                     status:1,
-                    goodsType:'',
+                    goodsType:'1',
                 },
                 rules: {
                     goodsId: [

@@ -1,5 +1,5 @@
 <template>
-    <Card class="list" v-if="isReady">
+    <Card class="list" v-if="adminId == 1">
         <Form ref="form" inline :model="filterParams" @submit.native.prevent>
             <Row type="flex">
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
@@ -85,7 +85,7 @@
                         const password = 123456
 
                         const { count, adminList } = await api.admin.list({
-                           pageNo, pageSize 
+                           pageNo, pageSize ,adminId
                         })
 
                         const { code,data,message } = await api.agent.queryCNum({
@@ -122,6 +122,7 @@
         },
         data () {
             return {
+                adminId:'',
                 value1:false,
                 filterParams: {
                     level: '',
@@ -172,17 +173,18 @@
                         minWidth: 100
                     },
                     {
-                        key: 'timeLogin',
-                        title: '最后登录时间',
-                        align: 'center',
-                        minWidth: 100
-                    },
-                    {
                         key: 'loginAccount',
                         title: '账号',
                         align: 'center',
                         width: 200
                     },
+                    {
+                        key: 'timeLogin',
+                        title: '最后登录时间',
+                        align: 'center',
+                        minWidth: 100
+                    },
+                   
                     // { slot:'goodsButton',title: '操作管理员',align: 'center',fixed: 'left',width: 200},
                 ],
                 editGoodsModal: {
@@ -194,6 +196,7 @@
         },
         mounted () {
             this.getList()
+            this.adminId = JSON.parse(window.localStorage.getItem("user")).id
         }
     }
 </script>

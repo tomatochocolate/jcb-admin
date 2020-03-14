@@ -71,7 +71,7 @@
                     password: '',
                     // proxyName: '',
                     // channelCode:'',
-                    // adminId:''
+                    adminId:''
                 },
                 rules: {
                     phone: [
@@ -93,7 +93,7 @@
             }
         },
         mounted(){
-            // this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
+            this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
         }
     }
 </script>

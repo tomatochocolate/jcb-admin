@@ -1,5 +1,5 @@
 <template>
-    <Card class="list" v-if="isReady">
+    <Card class="list" v-if="adminId == 1">
         <Form ref="form" inline :model="filterParams" @submit.native.prevent>
             <Row type="flex">
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
@@ -33,6 +33,10 @@
             <template slot-scope="{ row, index }" slot="goodsType">
                     {{row.goodsType == 1?'包时':'流量'}}
             </template>
+            <template slot-scope="{ row, index }" slot="buyMinute">
+                    {{row.buyMinute}}
+                    {{row.goodsType == 1?'天':'G'}}
+            </template>
         </Table>
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
@@ -40,7 +44,7 @@
 
         <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
         <!-- <add-setmeal v-model="addSetMealModal" @on-refresh="handleFilterQuery" /> -->
-        <modify-account v-model="modifyAccountModal" @on-refresh="handleFilterQuery" :modifyparams='modifyparams'/>
+        <modify-account v-model="modifyAccountModal" @on-refresh="handleFilterQuery"  ref="child"/>
     </Card>
 </template>
 <script type="text/babel">
@@ -71,8 +75,9 @@
             }, 
             handlemodifyAccount (row) {
                 this.modifyAccountModal = true
-                this.modifyparams = row
-                console.log(this.modifyparams);
+                const v1 = JSON.parse(JSON.stringify(row))
+                const v2 = JSON.parse(JSON.stringify(row))
+                this.$refs.child.childMethods(v1,v2)
                 
             }, 
             handleFilterQuery () {
@@ -122,7 +127,7 @@
                 
                 let that = this
                 axios({
-                      url: "http://192.168.0.160:9988/api-console/goods/addorupdate", //在线跨域请求
+                      url: "/api-console/goods/addorupdate", //在线跨域请求
                       method: "post", //默认是get请求
                       //   dataType:'JSON',
                       headers: {
@@ -151,6 +156,7 @@
         },
         data () {
             return {
+                adminId:'',
                 goodId:"",
                 value1:false,
                 filterParams: {
@@ -201,14 +207,15 @@
                 modifyAccountModal: false,
 
                 columns: [
-                    { slot:'goodsButton',title: '套餐启用/禁用',align: 'center',fixed: 'left',width: 200},
+                    { slot:'goodsButton',title: '套餐启用/禁用',align: 'center',fixed: 'left',width: 150},
                     { slot: 'status',title: '账号状态',width: 200,align: 'center'},
-                    { key: 'goodsName',title: '套餐类型',align: 'center',minWidth: 100},
-                    { key: 'goodsId',title: '套餐ID',align: 'center',minWidth: 100},
-                    { key: 'content',title: '套餐描述',align: 'center',width: 250},
-                    { key: 'price',title: '现价',align: 'center',width: 100},
-                    { slot: 'goodsType',title: '套餐类型',align: 'center',width: 100},
-                    { key: 'priceShow',title: '原价',align: 'center',width: 100},
+                     { key: 'goodsId',title: '套餐ID',align: 'center',width: 150},
+                    { key: 'goodsName',title: '套餐名称',align: 'center',width: 150},
+                    { slot: 'goodsType',title: '套餐类型',align: 'center',width: 150},
+                    { slot: 'buyMinute',title: '套餐数值（天/G）',align: 'center',width: 180},
+                    { key: 'priceShow',title: '原价',align: 'center',width: 150},
+                    { key: 'price',title: '销售价格',align: 'center',width: 150},
+                    { key: 'content',title: '套餐描述',align: 'center',minwidth: 250}
     
                 ],
                 editGoodsModal: {
@@ -220,6 +227,7 @@
         },
         mounted () {
             this.getList()
+            this.adminId = JSON.parse(window.localStorage.getItem("user")).id
         }
     }
 </script>

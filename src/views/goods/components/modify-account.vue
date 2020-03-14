@@ -14,29 +14,35 @@
                 <Input clearable type="text" placeholder="请输入商品名称" :maxlength="32" v-model="params.goodsName" @on-enter="handleSubmitForm" style="width:150px"/>
                 <Input  disabled="disabled" :value='modifyparams.goodsName'style="margin-left:50px;width:78px"  />
             </FormItem>
+            <FormItem prop="" label="套餐类型1">
+                <RadioGroup v-model="params.goodsType"  size="large">
+                    <Radio label='1'>包时（天）</Radio>
+                    <Radio label='2'>流量（G）</Radio>
+                </RadioGroup>
+            </FormItem>   
             <FormItem prop="buyMinute" label="套餐数值">
                 <Input clearable type="text" placeholder="输入对应套餐数值" :maxlength="16" v-model="params.buyMinute" @on-enter="handleSubmitForm" style="width:150px" />
                 <Input  disabled="disabled" :value='modifyparams.buyMinute'style="margin-left:50px;width:78px"  />
             </FormItem>
             <FormItem prop="priceShow" label="原价">
-                <Input clearable type="text" placeholder="请输代理名称" v-model="params.priceShow" @on-enter="handleSubmitForm" style="width:150px"/>
+                <Input clearable type="text" placeholder="请输原价" v-model="params.priceShow" @on-enter="handleSubmitForm" style="width:150px"/>
                 <Input  disabled="disabled" :value='modifyparams.priceShow'style="margin-left:50px;width:78px"  />
             </FormItem>
             <FormItem  prop="price" label="销售价格">
-                <Input clearable type="text" placeholder="请输入渠道码" v-model="params.price" @on-enter="handleSubmitForm" style="width:150px"/>
+                <Input clearable type="text" placeholder="请输入销售价格" v-model="params.price" @on-enter="handleSubmitForm" style="width:150px"/>
                 <Input  disabled="disabled" :value='modifyparams.price'style="margin-left:50px;width:78px"  />
             </FormItem>  
             <FormItem  prop="content" label="商品描述">
                 <Input clearable type="text" placeholder="请输入商品描述" v-model="params.content" @on-enter="handleSubmitForm" />
                 <!-- <Input  disabled="disabled" :value='modifyparams.content'style="margin-left:50px;width:78px"  /> -->
             </FormItem> 
-            <FormItem  prop="goodsType" label="套餐类型">
+            <!-- <FormItem  prop="goodsType" label="套餐类型">
                 <Select clearable placeholder="时长单位" v-model="params.goodsType" style="width:150px">
                             <Option value="1">包时（天）</Option>
                             <Option value="2">流量（G）</Option>
                 </Select>
-                <!-- <InputNumber  disabled="disabled" :value='modifyparams.goodsType'style="margin-left:50px"></InputNumber> -->
-            </FormItem>                            
+            </FormItem>  -->
+                                 
         </Form>
         <div slot="footer">
             <Button type="text" @click="show = false">取消</Button>
@@ -56,28 +62,37 @@
                 type: Boolean,
                 default: false
             },
-            modifyparams:{
+            modify:{
                 
             }
         },
         watch: {
             show (value) {
                 this.$emit('input', value)
-                
+                // this.params = this.modifyparams
             },
             value (value) {
                 this.show = value
-                this.params = this.modifyparams
-            }
+            },
+            // modifyparams(value){
+            //     this.starchange()
+                
+            // }
         },
         methods:{
+            childMethods(v1,v2){
+                this.params = v1
+                this.modifyparams = v2
+                this.params.goodsType = this.params.goodsType.toString()
+                
+            },
             setMeal(e){
                 var obj = { goodsId : 123 , adminId : 1  }
                 var str = JSON.stringify(obj)
                 
                 let that = this
                 axios({
-                      url: "http://192.168.0.160:9988/api-console/goods/addorupdate", //在线跨域请求
+                      url: "/api-console/goods/addorupdate", //在线跨域请求
                       method: "post", //默认是get请求
                       //   dataType:'JSON',
                       headers: {
@@ -95,7 +110,7 @@
                         buyMinute : this.params.buyMinute ,priceShow : this.params.priceShow ,
                         price : this.params.price ,content : this.params.content ,
                         adminId : this.params.adminId ,status : this.params.status ,
-                        goodsType : this.params.goodsType
+                        goodsType : this.params.goodsType *1
                       }
                     })
                     .then(function(val) {
@@ -113,7 +128,6 @@
                 try {
                     
                     const abc = await this.setMeal(this.params)
-                    console.log(abc);
                     const code = 200
                     this.isSubmit = false
                     if (code !== 200) {
@@ -132,6 +146,17 @@
 
         data () {
             return {
+                modifyparams: {
+                    adminId:1,
+                    goodsId: 1,
+                    goodsName: 1,
+                    buyMinute: 1,
+                    priceShow:1,
+                    price:1,
+                    content:1,
+                    status:1,
+                    goodsType:1,
+                },
                 show: this.value,
                 params: {
                     goodsId: '',

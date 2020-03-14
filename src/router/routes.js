@@ -16,15 +16,15 @@ import admin from './modules/admin'
 
 export default [
     ...home,
-    ...user,
-    ...goods,
-    ...coupon,
     ...agent,
+    ...coupon,
     ...node,
     ...order,
     ...feedback,
     ...appVersion,
     ...statistics,
     ...advert,
+    ...user,
+    ...goods,
     ...admin
 ]

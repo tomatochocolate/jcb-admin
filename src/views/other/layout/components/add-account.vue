@@ -1,5 +1,5 @@
 <template>
-    <Modal mask-closable scrollable title="添加管理员"
+    <Modal mask-closable scrollable title="修改密码"
            :width="500" :loading="isSubmit"
            v-model="show">
         <Form ref="form"
@@ -9,8 +9,8 @@
             <FormItem prop="password" label="密码">
                 <Input clearable type="password" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="params.password" @on-enter="handleSubmitForm" />
             </FormItem>
-            <FormItem prop="confirmPassword" label="确定密码">
-                <Input clearable type="password" placeholder="请输入密码（6~16位）" :maxlength="16"  @on-enter="handleSubmitForm" />
+            <FormItem prop="confirm" label="确定密码">
+                <Input clearable type="password" placeholder="请输入密码（6~16位）" :maxlength="16" v-model="confirmPassword" @on-enter="handleSubmitForm" />
             </FormItem>
         </Form>
         <div slot="footer">
@@ -43,7 +43,10 @@
         methods:{
             async handleSubmitForm () {
                 if (!await this.$refs.form.validate() || this.isSubmit) return
-                
+                if(this.params.password != this.confirmPassword){
+                    this.$Message.error('密码前后不一致')
+                    return
+                    }
                 this.isSubmit = true
                 try {
                     
@@ -55,8 +58,8 @@
                         return
                     }
                     this.show = false
-                    this.$emit('on-refresh')
-                    this.$Message.success('添加成功')
+                    this.$emit('change')
+                    this.$Message.success('修改密码成功')
                 } catch (e) {
                     this.isSubmit = false
                     this.$Message.error(e.message)
@@ -75,6 +78,7 @@
                     // channelCode:'',
                     adminId:''
                 },
+                confirmPassword:'',
                 rules: {
                     phone: [
                         { required: true, message: '请输入手机号码', trigger: 'change blur' },
@@ -88,7 +92,10 @@
                         { required: true, message: '请输入密码', trigger: 'change blur' },
                         { min: 6, max: 16, message: '请输入6~16位的密码' }
                     ],
-                    agentId: { required: true, message: '请选择代理商', trigger: 'change blur' }
+                    confirmPassword: [
+                        { required: true, message: '请输入密码', trigger: 'change blur' },
+                        { max: 16, message: '请输入6~16位的密码' }
+                    ],
                 },
 
                 isSubmit: false

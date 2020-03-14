@@ -42,7 +42,7 @@
                     <keep-alive :include="caches"><router-view /></keep-alive>
                 </transition>
             </Content>
-            <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
+            <add-account v-model="addAccountModal" @change='outLogin'/>
         </Layout>
     </Layout>
 </template>
@@ -81,7 +81,7 @@
                 this.addAccountModal = true
             },
             change(){
-                    console.log('change');
+                   outLogin()
                     
             },
             outLogin(){
