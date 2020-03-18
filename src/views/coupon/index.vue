@@ -49,7 +49,7 @@
                         <InputNumber  disabled="disabled" :value='comboList[5].balance'></InputNumber>
                     </FormItem>
                 </Col>
-                <Col span="3">
+                <!-- <Col span="3">
                     <FormItem label="高速包月">
                         <InputNumber  disabled="disabled" :value='comboList[6].balance'></InputNumber>
                     </FormItem>
@@ -68,7 +68,7 @@
                     <FormItem label="高速全年">
                         <InputNumber  disabled="disabled" :value='comboList[9].balance'></InputNumber>
                     </FormItem>
-                </Col>
+                </Col> -->
             </Row>
         </Form>
         <Table :data="list" :columns="columns" >

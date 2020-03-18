@@ -95,7 +95,7 @@
                 // members_id:100524,pageName:'/console/user',flag:0
                 // })
                 axios({
-                      url: "https://test.jichibang2019.com/api-console/member/enableOrDisable", //在线跨域请求
+                      url: "/api-console/member/enableOrDisable", //在线跨域请求
                       method: "post", //默认是get请求
                       headers: {
                         //设置请求头
@@ -121,7 +121,7 @@
                 
                 let that = this
                 axios({
-                      url: "https://test.jichibang2019.com/api-console/member/enableOrDisable", //在线跨域请求
+                      url: "/api-console/member/enableOrDisable", //在线跨域请求
                       method: "post", //默认是get请求
                       headers: {
                         //设置请求头

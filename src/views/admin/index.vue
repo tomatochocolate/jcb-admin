@@ -4,14 +4,14 @@
             <Row type="flex">
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="status">
-                        <Select clearable placeholder="使用状态" v-model="filterParams.status">
-                            <Option value="1">已使用</Option>
-                            <Option value="2">未使用</Option>
+                        <Select clearable placeholder="状态" v-model="filterParams.status">
+                            <Option value="1">正常</Option>
+                            <Option value="2">禁用</Option>
                         </Select>
                     </FormItem>
                 </Col>
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
-                    <FormItem prop="id"><Input clearable placeholder="卡号" v-model="filterParams.cardId" /></FormItem>
+                    <FormItem prop="id"><Input clearable placeholder="ID" v-model="filterParams.cardId" /></FormItem>
                 </Col>
                 <Col>
                     <FormItem class="btn-group">
