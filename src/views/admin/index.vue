@@ -84,20 +84,20 @@
                         const adminId = JSON.parse(window.localStorage.getItem("user")).id
                         const password = 123456
 
-                        const { count, adminList } = await api.admin.list({
+                        const { code,count, adminList } = await api.admin.list({
                            pageNo, pageSize ,adminId
                         })
 
-                        const { code,data,message } = await api.agent.queryCNum({
-                            adminId,
-                        })
+//                         const { code,data,message } = await api.agent.queryCNum({
+//                             adminId,
+//                         })
 
-                        if (code == 200){
-                            this.comboList = data.sort((a,b)=>{
-                               return a.goods_id -  b.goods_id
-                             });
+//                         if (code == 200){
+//                             this.comboList = data.sort((a,b)=>{
+//                                return a.goods_id -  b.goods_id
+//                              });
                             
-                        } 
+//                         } 
 
                         resolve({
                             data: adminList,
