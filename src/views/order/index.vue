@@ -13,26 +13,26 @@
                         </Select>
                     </FormItem>
                 </Col>
-                <Col :xs="12" :sm="6" :lg="4" :xl="3">
+                <!-- <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="pay_channel">
                         <Select clearable placeholder="支付渠道" v-model="filterParams.pay_channel">
                             <Option value="alipay">支付宝</Option>
                             <Option value="wechat">微信</Option>
                         </Select>
                     </FormItem>
-                </Col>
+                </Col> -->
                 <!-- <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="user_id"><Input clearable placeholder="用户ID" v-model="filterParams.user_id" /></FormItem>
                 </Col> -->
                <Col :xs="12" :sm="6" :lg="4" :xl="3">
                    <FormItem prop="phone"><Input clearable placeholder="手机" v-model="filterParams.phone" /></FormItem>
                </Col>
-                <Col :xs="12" :sm="6" :lg="4" :xl="3">
+                <!-- <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="order_no"><Input clearable placeholder="订单编号" v-model="filterParams.order_no" /></FormItem>
                 </Col>
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="out_trade_no"><Input clearable placeholder="支付单号" v-model="filterParams.out_trade_no" /></FormItem>
-                </Col>
+                </Col> -->
                
                 <!-- <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="pay_time">
@@ -158,16 +158,16 @@
 
                 columns: [
                     // { key: 'payNo', title: '第三方支付流水号', width: 240 ,align: 'center'},
-                    { slot: 'memberId', title: '用户ID', width: 150 ,align: 'center'},
+                    { slot: 'memberId', title: '用户ID', minWidth: 150 ,align: 'center'},
                     // { slot: 'phone', title: '手机号码', width: 150 ,align: 'center'},
-                    { slot: 'goodsName', title: '商品名称', width: 150 ,align: 'center'},
+                    { slot: 'goodsName', title: '商品名称', minWidth: 150 ,align: 'center'},
                     // { slot: 'quantity', title: '数量', width: 120 ,align: 'center'},
-                    { slot: 'priceTotal', title: '总价格', width: 150 ,align: 'center'},
-                    { slot: 'status', title: '订单状态', width: 100 ,align: 'center'},
-                    { slot: 'payChannel', title: '支付渠道', width: 150 ,align: 'center'},
+                    { slot: 'priceTotal', title: '总价格', minWidth: 150 ,align: 'center'},
+                    { slot: 'status', title: '订单状态', minWidth: 100 ,align: 'center'},
+                    { slot: 'payChannel', title: '支付渠道', minWidth: 150 ,align: 'center'},
                     // { slot: 'platform', title: '下单平台', width: 100 ,align: 'center'},
-                    { key: 'timeAdd', title: '下单时间', width: 180 ,align: 'center'},
-                    { key: 'timePay', title: '付款时间', width: 180 ,align: 'center'},
+                    { key: 'timeAdd', title: '下单时间', minWidth: 180 ,align: 'center'},
+                    { key: 'timePay', title: '付款时间', minWidth: 180 ,align: 'center'},
                     { key: 'recordId', title: '订单编号', minWidth: 180 ,align: 'center'},
                 ],
 
