@@ -159,7 +159,11 @@
                         })
 
                         this.value1 = true;
-                        this.couponYe = row.goodsList
+                        this.couponYe = row.goodsList.sort((a,b)=>{
+                               return a.balance -  b.balance
+                             });
+                        console.log(this.couponYe);
+                        
                     }
                     catch (e) {
                         reject(e)

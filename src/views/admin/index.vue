@@ -1,5 +1,5 @@
 <template>
-    <Card class="list" v-if="adminId == 1">
+    <Card class="list" >
         <Form ref="form" inline :model="filterParams" @submit.native.prevent>
             <Row type="flex">
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
