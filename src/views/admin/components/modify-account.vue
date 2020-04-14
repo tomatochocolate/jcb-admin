@@ -35,6 +35,7 @@
         },
         watch: {
             show (value) {
+                if (!value) this.$refs.form.resetFields()
                 this.$emit('input', value)
             },
             value (value) {
