@@ -16,6 +16,7 @@ import * as appVersion from './modules/app_version'
 import * as coupon from './modules/coupon'
 import * as agent from './modules/agent'
 import * as admin from './modules/admin'
+import * as netBar from './modules/netBar'
 
 export {
     axios, instance,
@@ -32,5 +33,6 @@ export {
     appVersion,
     coupon,
     agent,
-    admin
+    admin,
+    netBar
 }

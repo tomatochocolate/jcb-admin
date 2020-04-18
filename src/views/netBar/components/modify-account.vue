@@ -5,11 +5,14 @@
         <Form ref="form"
               :model="params" :rules="rules" :label-width="140"
               @submit.native.prevent>
-            <FormItem prop="phone" label="手机号码">
-                <Input clearable type="text" placeholder="请输入管理员账号" v-model="params.phone" @on-enter="supplement"/>
+            <FormItem prop="proxyId" label="代理商ID">
+                <Input clearable type="text" placeholder="请输入代理商ID" v-model="params.proxyId" @on-enter="supplement"/>
+            </FormItem>
+            <FormItem prop="account" label="管理员账号">
+                <Input clearable type="text" placeholder="请输入管理员账号" v-model="params.account" />
             </FormItem> 
-            <FormItem prop="proxyName" label="代理名字">
-                <Input clearable type="text" placeholder="请输入密码" v-model="params.proxyName" @on-enter="supplement"/>
+            <FormItem prop="password" label="密码">
+                <Input clearable type="text" placeholder="请输入密码" v-model="params.password" />
             </FormItem>                        
         </Form>
         <div slot="footer">
@@ -46,11 +49,11 @@
                 this.isSubmit = true
                 try {
                     
-                    const { code, msg } = await api.admin.addProxyMember(this.params)
+                    const { code, message } = await api.admin.proxysupplement(this.params)
 
                     this.isSubmit = false
                     if (code !== 200) {
-                        this.$Message.error(msg)
+                        this.$Message.error(message)
                         return
                     }
                     this.show = false
@@ -59,7 +62,7 @@
                     this.$Message.success('添加成功')
                 } catch (e) {
                     this.isSubmit = false
-                    this.$Message.error(e.msg)
+                    this.$Message.error(e.message)
                 }
             },
         },
@@ -67,8 +70,9 @@
             return {
                 show: this.value,
                 params: {
-                    phone: '',
-                    proxyName: '',
+                    proxyId: '',
+                    account: '',
+                    password: '',
                 },
                 rules: {
                     phone: [
@@ -83,9 +87,8 @@
                         { required: true, message: '请输入密码', trigger: 'change blur' },
                         { min: 6, max: 16, message: '请输入6~16位的密码' }
                     ],
-                    proxyName: [
-                        { required: true, message: '请选择代理商', trigger: 'change blur' }
-                    ]
+                    proxyId
+                    : { required: true, message: '请选择代理商', trigger: 'change blur' }
                 },
 
                 isSubmit: false

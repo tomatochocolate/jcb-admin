@@ -249,7 +249,7 @@
                 filterParams: {
                     level: '',
                     account: '',
-                    status: 2
+                    status: 1
                 },
                 comboList:[
                     {

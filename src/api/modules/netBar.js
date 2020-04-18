@@ -18,8 +18,8 @@ export const list = (params) => {
  *补充代理商账号
  * @returns { Promise }
  */
-export const addProxyMember = (params) => {
-    return instance.post(`${module}/add/addProxyMember`, params)
+export const proxysupplement = (params) => {
+    return instance.post(`${module}/proxysupplement`, params)
 }
 /**
  * 添加用户套餐记录

@@ -13,18 +13,20 @@ import appVersion from './modules/app_version'
 import statistics from './modules/statistics'
 import coupon from './modules/coupon'
 import admin from './modules/admin'
+import netBar from './modules/netBar'
 
 export default [
     ...home,
     ...agent,
     ...coupon,
-    ...node,
+    // ...node,
     ...order,
-    ...feedback,
-    ...appVersion,
-    ...statistics,
-    ...advert,
+    // ...feedback,
+    // ...appVersion,
+    // ...statistics,
+    // ...advert,
     ...user,
     ...goods,
-    ...admin
+    ...admin,
+    ...netBar
 ]
