@@ -1,29 +1,21 @@
 <template>
-    <Modal mask-closable scrollable title="添加商家信息"
+    <Modal mask-closable scrollable title="添加用户套餐记录"
            :width="500" :loading="isSubmit"
            v-model="show">
-        <Form ref="form"
-              :model="params" :rules="rules" :label-width="140"
+        <Form ref="form" :model="params" :rules="rules" :label-width="90"
               @submit.native.prevent>
-            <FormItem prop="name" label="名称">
-                <Input clearable type="text" placeholder="请输入名称" :maxlength="16" v-model="params.name" @on-enter="handleSubmitForm" />
+              
+            <FormItem prop="memberId" label="用户ID">
+                <Input clearable type="text" placeholder="请填写用户ID" :maxlength="32" v-model="params.memberId" style="width: 100px" />           
             </FormItem>
-            <FormItem prop="ips" label="ip">
-                <Input clearable type="text" placeholder="请输入ip" :maxlength="32" v-model="params.ips" @on-enter="handleSubmitForm"/>
+            <FormItem prop="goodsId" label="套餐ID">
+                <Input clearable type="text" placeholder="请输入套餐ID" :maxlength="32" v-model="params.goodsId" @on-enter="showChange" style="width: 100px" />
             </FormItem>
-            <!-- <FormItem prop="status" label="状态">
-                <Input clearable type="text" placeholder="请输入状态" :maxlength="32" v-model="params.status" @on-enter="handleSubmitForm"/>
-            </FormItem> -->
-            <FormItem prop="type " label="企业类型">
-                <Input clearable type="text" placeholder="请输入企业类型" :maxlength="32" v-model="params.type" @on-enter="handleSubmitForm"/>
-            </FormItem>
-            <FormItem prop="remark" label="备注">
-                <Input clearable type="text" placeholder="请输入备注" :maxlength="32" v-model="params.remark" @on-enter="handleSubmitForm"/>
-            </FormItem>
+           
         </Form>
         <div slot="footer">
             <Button type="text" @click="show = false">取消</Button>
-            <Button type="primary" @click="handleSubmitForm">确定</Button>
+            <Button type="primary" @click="coupon">确定</Button>
         </div>
     </Modal>
 </template>
@@ -32,30 +24,41 @@
     import { phone } from '@/libs/validator'
 
     export default {
-        name: 'AddAccount',
+        name: 'TableExpand',
         props: {
             value: {
                 type: Boolean,
                 default: false
-            }
+            },
+            comboList : {
+                
+            },
+            tableAccountModal:{}
         },
         watch: {
             show (value) {
+                
                 if (!value) this.$refs.form.resetFields()
                 this.$emit('input', value)
+                // this.showChange()
+                
             },
             value (value) {
                 this.show = value
+                
             }
         },
         methods:{
-            async handleSubmitForm () {
+            showChange(){
+                this.$emit('on-refresh')
+            },
+            async coupon () {
                 if (!await this.$refs.form.validate() || this.isSubmit) return
                 
                 this.isSubmit = true
                 try {
                     
-                    const { code, message } = await api.netBar.orupdate(this.params)
+                    const { code, message } = await api.admin.membersupplement(this.params)
 
                     this.isSubmit = false
                     if (code !== 200) {
@@ -64,6 +67,7 @@
                     }
                     this.show = false
                     this.$emit('on-refresh')
+                    this.$emit('fatherMethod');
                     this.$Message.success('添加成功')
                 } catch (e) {
                     this.isSubmit = false
@@ -71,18 +75,33 @@
                 }
             },
         },
-
         data () {
             return {
                 show: this.value,
                 params: {
-                    name: '',
-                    ips: '',
-                    status:1,
-                    type:'',
-                    remark:'',
-                    id:''
+                   memberId:'',
+                   goodsId:''
                 },
+                cityList: [
+                    {
+                        value: 2,
+                        label: '代理甲'
+                    },
+                    {
+                        value: 5,
+                        label: '代理乙'
+                    },
+                    {
+                        value: 6,
+                        label: '代理丙'
+                    },
+                ],
+                shareList:{
+                    month : 0,
+                    quarter : 0,
+                    half : 0,
+                    year : 0
+                },                
                 rules: {
                     phone: [
                         { required: true, message: '请输入手机号码', trigger: 'change blur' },
@@ -103,7 +122,7 @@
             }
         },
         mounted(){
-            this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
+            // this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
         }
     }
 </script>

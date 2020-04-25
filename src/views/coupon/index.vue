@@ -13,10 +13,11 @@
                 <Col :xs="12" :sm="6" :lg="4" :xl="3">
                     <FormItem prop="id"><Input clearable placeholder="卡号" v-model="filterParams.cardId" /></FormItem>
                 </Col>
-                <Col>
+                <!-- <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
                         <Button type="info" @click="handleCreateAccountModal">生成卡券</Button>
+                        <Button type="info" @click="handleAddAccount">批量生成卡券</Button>
                     </FormItem>
                 </Col>
                 <Col span="3"> 
@@ -48,7 +49,14 @@
                     <FormItem label="全年套餐">
                         <InputNumber  disabled="disabled" :value='comboList[5].balance'></InputNumber>
                     </FormItem>
+                </Col> -->
+                <Col span="3" v-for="item,index in comboList" :key="item.goods_id"> 
+                    <FormItem label="7天套餐">
+                        <span slot="label">{{item.goodsName}}</span>
+                        <InputNumber  disabled="disabled" :value='item.balance'></InputNumber>
+                    </FormItem>
                 </Col>
+               
                 <!-- <Col span="3">
                     <FormItem label="高速包月">
                         <InputNumber  disabled="disabled" :value='comboList[6].balance'></InputNumber>
@@ -87,6 +95,7 @@
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
+         <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
          <coupon-account v-model="couponAccountModal" @on-refresh="handleFilterQuery" :comboList='comboList'/>
          <create-account v-model="createAccountModal" @on-refresh="handleFilterQuery" :comboList='comboList' :proxyId='proxyId'/>
 
@@ -97,6 +106,8 @@
     import page from '@/mixins/page'
     import { datePicker } from '@/config'
     import { dayjs } from '@/libs/utils'
+
+    import AddAccount from './components/add-account'
     import CouponAccount from './components/coupon-account'
     import CreateAccount from './components/create-account'
     // import { log } from 'util';
@@ -104,8 +115,11 @@
     export default {
         name: 'coupon',
         mixins: [ page ],
-        components:{CouponAccount,CreateAccount},
+        components:{CouponAccount,CreateAccount,AddAccount},
         methods: {
+            handleAddAccount () {
+                this.addAccountModal = true
+            },
             handleCouponAccountModal(){
                 this.couponAccountModal = true
             },
@@ -212,6 +226,7 @@
 	            	}
 	            ],
                 proxyId:123,
+                addAccountModal:false,
                 couponAccountModal:false,
                 createAccountModal:false,
                 columns: [

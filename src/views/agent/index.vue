@@ -30,7 +30,7 @@
                         <Button type="info" @click="handleTableAccount">分配代理卡券余额</Button>
                     </FormItem>
                 </Col>
-                <Col span="3"> 
+                <!-- <Col span="3"> 
                     <FormItem label="7天套餐">
                         <InputNumber  disabled="disabled" :value='comboList[0].balance'></InputNumber>
                     </FormItem>
@@ -59,7 +59,14 @@
                     <FormItem label="全年套餐">
                         <InputNumber  disabled="disabled" :value='comboList[5].balance'></InputNumber>
                     </FormItem>
+                </Col> -->
+                <Col span="3" v-for="item,index in comboList" :key="item.goods_id"> 
+                    <FormItem label="7天套餐">
+                        <span slot="label">{{item.goodsName}}</span>
+                        <InputNumber  disabled="disabled" :value='item.balance'></InputNumber>
+                    </FormItem>
                 </Col>
+               
                 <!-- <Col span="3">
                     <FormItem label="高速包月">
                         <InputNumber  disabled="disabled" :value='comboList[6].balance'></InputNumber>

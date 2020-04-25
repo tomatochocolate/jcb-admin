@@ -58,6 +58,7 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
+                        <Button type="info" @click="handleTableAccount">添加用户套餐记录</Button>
                     </FormItem>
                 </Col>
             </Row>
@@ -95,6 +96,8 @@
         <Page style="margin-top: 15px;"
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
+
+        <table-expand  v-model="tableAccountModal"   @on-refresh='handleTableAccount' />
     </Card>
 </template>
 <script type="text/babel">
@@ -103,13 +106,19 @@
     import { dayjs } from '@/libs/utils'
     import page from '@/mixins/page'
 
+    import TableExpand from './components/table-expand'
+
     export default {
         name: 'Order',
         mixins: [ page ],
+        components:{TableExpand},
         methods: {
             handleFilterQuery () {
                 this.page.current = 1
                 this.getList()
+            },
+            handleTableAccount(){
+                 this.tableAccountModal = true
             },
             getListData () {
                 return new Promise(async (resolve, reject) => {
@@ -155,6 +164,8 @@
                     payAdd: [],
                     created_at: []
                 },
+
+                tableAccountModal:false,
 
                 columns: [
                     // { key: 'payNo', title: '第三方支付流水号', width: 240 ,align: 'center'},

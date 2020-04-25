@@ -16,9 +16,9 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button type="info" @click="handleAddAccount">添加管理员</Button>
-                        <Button type="info" @click="handleTableAccount">添加用户套餐记录</Button>
-                        <Button type="info" @click="handlemodifyAccount">代理商账号补充</Button>
+                        <Button type="info" @click="handleAddAccount">新增或者修改网吧信息</Button>
+                        <!-- <Button type="info" @click="handleTableAccount">添加用户套餐记录</Button> -->
+                        <!-- <Button type="info" @click="handlemodifyAccount">代理商账号补充</Button> -->
                     </FormItem>
                 </Col>
             </Row>
@@ -31,6 +31,9 @@
             </template>
             <template slot-scope="{ row, index }" slot="status">
                     {{row.status == 1?'正常':'禁用'}}
+            </template>
+             <template slot-scope="{ row, index }" slot="type">
+                    {{row.type == 1?'常规':'网吧型'}}
             </template>
         </Table>
         <Page style="margin-top: 15px;"
@@ -84,7 +87,7 @@
                         const adminId = JSON.parse(window.localStorage.getItem("user")).id
                         const password = 123456
 
-                        const { code,count, adminList } = await api.admin.list({
+                        const { data,code,count } = await api.netBar.list({
                            pageNo, pageSize ,adminId
                         })
 
@@ -100,7 +103,7 @@
 //                         } 
 
                         resolve({
-                            data: adminList,
+                            data: data,
                             meta: {
                                 total: count
                             }
@@ -161,26 +164,38 @@
 
                 columns: [
                     {
+                        key: 'name',
+                        title: '商户名称',
+                        width: 200,
+                        align: 'center'
+                    },
+                    {
                         slot: 'status',
                         title: '账号状态',
                         width: 200,
                         align: 'center'
                     },
                     {
-                        key: 'adminId',
+                        key: 'id',
                         title: '管理员ID',
                         align: 'center',
                         minWidth: 100
                     },
                     {
-                        key: 'loginAccount',
-                        title: '账号',
+                        slot: 'type',
+                        title: '商户类型',
                         align: 'center',
                         width: 200
                     },
                     {
-                        key: 'timeLogin',
-                        title: '最后登录时间',
+                        key: 'created',
+                        title: '创建时间',
+                        align: 'center',
+                        minWidth: 100
+                    },
+                    {
+                        key: 'ips',
+                        title: 'ip',
                         align: 'center',
                         minWidth: 100
                     },
