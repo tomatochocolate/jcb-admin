@@ -14,8 +14,14 @@
             <!-- <FormItem prop="status" label="状态">
                 <Input clearable type="text" placeholder="请输入状态" :maxlength="32" v-model="params.status" @on-enter="handleSubmitForm"/>
             </FormItem> -->
-            <FormItem prop="type " label="企业类型">
+            <!-- <FormItem prop="Ntype" label="企业类型">
                 <Input clearable type="text" placeholder="请输入企业类型" :maxlength="32" v-model="params.type" @on-enter="handleSubmitForm"/>
+            </FormItem> -->
+            <FormItem prop="" label="企业类型">
+                <RadioGroup v-model="params.type"  size="large">
+                    <Radio label='1'>常规</Radio>
+                    <Radio label='2'>网吧型</Radio>
+                </RadioGroup>
             </FormItem>
             <FormItem prop="remark" label="备注">
                 <Input clearable type="text" placeholder="请输入备注" :maxlength="32" v-model="params.remark" @on-enter="handleSubmitForm"/>
@@ -79,7 +85,7 @@
                     name: '',
                     ips: '',
                     status:1,
-                    type:'',
+                    type:"1",
                     remark:'',
                     id:''
                 },
@@ -96,7 +102,21 @@
                         { required: true, message: '请输入密码', trigger: 'change blur' },
                         { min: 6, max: 16, message: '请输入6~16位的密码' }
                     ],
-                    agentId: { required: true, message: '请选择代理商', trigger: 'change blur' }
+                    agentId: { required: true, message: '请选择代理商', trigger: 'change blur' },
+
+                    name: [
+                        { required: true, message: '请输入名称', trigger: 'change blur' },
+                        { min: 2, max: 16, message: '请输入不少于两个字符' }
+                    ],
+                    ips: [
+                        { required: true, message: '请输入ip', trigger: 'change blur' },
+                        { min: 6, max: 16, message: '请输入ip地址' }
+                    ],
+                    Ntype: [
+                        { required: true, message: '请输入密码', trigger: 'change blur' },
+                        { min: 6, max: 16, message: '请输入6~16位的密码' }
+                    ],
+                
                 },
 
                 isSubmit: false

@@ -17,7 +17,7 @@
                             <Option value="2">流量（G）</Option>
                         </Select>
             </FormItem>  -->
-            <FormItem prop="" label="套餐类型1">
+            <FormItem prop="" label="套餐类型">
                 <RadioGroup v-model="params.goodsType"  size="large">
                     <Radio label='1'>包时（天）</Radio>
                     <Radio label='2'>流量（G）</Radio>

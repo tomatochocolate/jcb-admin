@@ -1,47 +1,32 @@
 <template>
-    <Modal mask-closable scrollable title="套餐修改"
+    <Modal mask-closable scrollable title="商户信息编辑"
            :width="500" :loading="isSubmit"
            v-model="show">
         <Form ref="form"
               :model="params" :rules="rules" :label-width="140"
               @submit.native.prevent>
            
-            <FormItem prop="goodsId" label="套餐ID">
-                <!-- <Input clearable type="text" placeholder="请输入套餐ID" :maxlength="32" v-model="params.goodsId" @on-enter="handleSubmitForm" style="width:150px"/> -->
-                <Input  disabled="disabled" :value='modifyparams.goodsId'style="width:78px"  />
+           <FormItem prop="name" label="名称">
+                <Input clearable type="text" placeholder="请输入名称" :maxlength="16" v-model="params.name" @on-enter="handleSubmitForm" />
             </FormItem>
-            <FormItem prop="goodsName" label="商品名称">
-                <Input clearable type="text" placeholder="请输入商品名称" :maxlength="32" v-model="params.goodsName" @on-enter="handleSubmitForm" style="width:150px"/>
-                <Input  disabled="disabled" :value='modifyparams.goodsName'style="margin-left:50px;width:78px"  />
+            <FormItem prop="ips" label="ip">
+                <Input clearable type="text" placeholder="请输入ip" :maxlength="32" v-model="params.ips" @on-enter="handleSubmitForm"/>
             </FormItem>
-            <FormItem prop="" label="套餐类型1">
-                <RadioGroup v-model="params.goodsType"  size="large">
-                    <Radio label='1'>包时（天）</Radio>
-                    <Radio label='2'>流量（G）</Radio>
+            <!-- <FormItem prop="status" label="状态">
+                <Input clearable type="text" placeholder="请输入状态" :maxlength="32" v-model="params.status" @on-enter="handleSubmitForm"/>
+            </FormItem> -->
+            <!-- <FormItem prop="Ntype" label="企业类型">
+                <Input clearable type="text" placeholder="请输入企业类型" :maxlength="32" v-model="params.type" @on-enter="handleSubmitForm"/>
+            </FormItem> -->
+            <FormItem prop="" label="企业类型">
+                <RadioGroup v-model="params.type"  size="large">
+                    <Radio label='1'>常规</Radio>
+                    <Radio label='2'>网吧型</Radio>
                 </RadioGroup>
-            </FormItem>   
-            <FormItem prop="buyMinute" label="套餐数值">
-                <Input clearable type="text" placeholder="输入对应套餐数值" :maxlength="16" v-model="params.buyMinute" @on-enter="handleSubmitForm" style="width:150px" />
-                <Input  disabled="disabled" :value='modifyparams.buyMinute'style="margin-left:50px;width:78px"  />
             </FormItem>
-            <FormItem prop="priceShow" label="原价">
-                <Input clearable type="text" placeholder="请输原价" v-model="params.priceShow" @on-enter="handleSubmitForm" style="width:150px"/>
-                <Input  disabled="disabled" :value='modifyparams.priceShow'style="margin-left:50px;width:78px"  />
+            <FormItem prop="remark" label="备注">
+                <Input clearable type="text" placeholder="请输入备注" :maxlength="32" v-model="params.remark" @on-enter="handleSubmitForm"/>
             </FormItem>
-            <FormItem  prop="price" label="销售价格">
-                <Input clearable type="text" placeholder="请输入销售价格" v-model="params.price" @on-enter="handleSubmitForm" style="width:150px"/>
-                <Input  disabled="disabled" :value='modifyparams.price'style="margin-left:50px;width:78px"  />
-            </FormItem>  
-            <FormItem  prop="content" label="商品描述">
-                <Input clearable type="text" placeholder="请输入商品描述" v-model="params.content" @on-enter="handleSubmitForm" />
-                <!-- <Input  disabled="disabled" :value='modifyparams.content'style="margin-left:50px;width:78px"  /> -->
-            </FormItem> 
-            <!-- <FormItem  prop="goodsType" label="套餐类型">
-                <Select clearable placeholder="时长单位" v-model="params.goodsType" style="width:150px">
-                            <Option value="1">包时（天）</Option>
-                            <Option value="2">流量（G）</Option>
-                </Select>
-            </FormItem>  -->
                                  
         </Form>
         <div slot="footer">

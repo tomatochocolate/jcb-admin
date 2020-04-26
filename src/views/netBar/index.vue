@@ -25,9 +25,7 @@
         </Form>
         <Table :data="list" :columns="columns" >
             <template slot-scope="{ row, index }" slot="goodsButton">
-                <!-- <Button type="primary" size="small" style="margin-right: 5px" @click="">启用</Button> -->
-                <!-- <Button type="error" size="small" @click="">禁用</Button> -->
-                <Button type="success" size="small" @click="">编辑</Button>
+                <Button type="success" size="small" @click="handlemodifyAccount(row)">编辑</Button>
             </template>
             <template slot-scope="{ row, index }" slot="status">
                     {{row.status == 1?'正常':'禁用'}}
@@ -40,47 +38,6 @@
               :total="page.total" :current="page.current"
               @on-change="handlePageNoChange" @on-page-size-change="handlePageSizeChange" />
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              
 
         <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
         <table-expand  v-model="tableAccountModal"   @on-refresh='handleTableAccount' />
@@ -109,8 +66,10 @@
             handleTableAccount () {
                 this.tableAccountModal = true
             }, 
-            handlemodifyAccount () {
+            handlemodifyAccount (row) {
                 this.modifyAccountModal = true
+                console.log(row);
+                
             }, 
             handleFilterQuery () {
                 this.page.current = 1
@@ -205,6 +164,7 @@
                 modifyAccountModal: false,
 
                 columns: [
+                    { slot:'goodsButton',title: '套餐启用/禁用',align: 'center',fixed: 'left',width: 150},
                     {
                         key: 'name',
                         title: '商户名称',
