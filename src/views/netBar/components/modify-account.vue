@@ -71,49 +71,16 @@
                 this.params.goodsType = this.params.goodsType.toString()
                 
             },
-            setMeal(e){
-                var obj = { goodsId : 123 , adminId : 1  }
-                var str = JSON.stringify(obj)
-                
-                let that = this
-                axios({
-                      url: "/api-console/goods/addorupdate", //在线跨域请求
-                      method: "post", //默认是get请求
-                      //   dataType:'JSON',
-                      headers: {
-                        //设置请求头
-                        // "Content-Type": "application/x-www-form-urlencoded",
-                        'token':'000000019DEtx2NGf1adckYbJpjNrkke',
-                        'Access-Control-Allow-Origin':'*',
-                        // "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-                        'Content-Type': 'application/json'
-                      },
-                      data: {
-                        //？search后面的值写在params中
-                        // members_id:e.memberId,pageName:'/console/user',flag:1
-                        goodsId : this.params.goodsId ,goodsName : this.params.goodsName ,
-                        buyMinute : this.params.buyMinute ,priceShow : this.params.priceShow ,
-                        price : this.params.price ,content : this.params.content ,
-                        adminId : this.params.adminId ,status : this.params.status ,
-                        goodsType : this.params.goodsType *1
-                      }
-                    })
-                    .then(function(val) {
-                      console.log(val); // axios会对我们请求来的结果进行再一次的封装（ 让安全性提高 ）
-                      return val
-                    })
-                    .catch(function(err) {
-                      console.log(err);
-                    });
-            },
+            
+               
             async handleSubmitForm () {
                 if (!await this.$refs.form.validate() || this.isSubmit) return
                 
                 this.isSubmit = true
                 try {
                     
-                    const abc = await this.setMeal(this.params)
-                    const code = 200
+                    const {code,message} = await api.netBar.orupdate(this.params)
+
                     this.isSubmit = false
                     if (code !== 200) {
                         this.$Message.error(message)
@@ -144,13 +111,12 @@
                 },
                 show: this.value,
                 params: {
-                    goodsId: '',
-                    goodsName: '',
-                    buyMinute: '',
-                    priceShow:'',
-                    price:'',
-                    content:'',
-                    status:1
+                    name: '',
+                    ips: '',
+                    status:1,
+                    type:"1",
+                    remark:'',
+                    id:''
                 },
                 rules: {
                     phone: [
