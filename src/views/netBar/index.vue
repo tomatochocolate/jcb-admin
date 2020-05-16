@@ -41,7 +41,7 @@
 
         <add-account v-model="addAccountModal" @on-refresh="handleFilterQuery"/>
         <table-expand  v-model="tableAccountModal"   @on-refresh='handleTableAccount' />
-        <modify-account v-model="modifyAccountModal" />
+        <modify-account v-model="modifyAccountModal" @on-refresh="handleFilterQuery" ref="child"/>
     </Card>
 </template>
 <script type="text/babel">
@@ -69,6 +69,9 @@
             handlemodifyAccount (row) {
                 this.modifyAccountModal = true
                 console.log(row);
+                const v1 = JSON.parse(JSON.stringify(row))
+                this.$refs.child.childMethods(v1)
+                
                 
             }, 
             handleFilterQuery () {
@@ -187,7 +190,7 @@
                         slot: 'type',
                         title: '商户类型',
                         align: 'center',
-                        width: 200
+                        width: 100
                     },
                     {
                         key: 'created',
@@ -198,6 +201,12 @@
                     {
                         key: 'ips',
                         title: 'ip',
+                        align: 'center',
+                        minWidth: 100
+                    },
+                     {
+                        key: 'remark',
+                        title: '备注',
                         align: 'center',
                         minWidth: 100
                     },

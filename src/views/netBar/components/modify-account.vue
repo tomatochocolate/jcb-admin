@@ -67,9 +67,16 @@
         methods:{
             childMethods(v1,v2){
                 this.params = v1
-                this.modifyparams = v2
-                this.params.goodsType = this.params.goodsType.toString()
-                
+                // this.modifyparams = v2
+                this.params.type = this.params.type.toString()
+                this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
+                var Aips = this.params.ips
+                console.log(this.params.ips.substr(1));
+                console.log(this.params.ips.substr(0,Aips.length - 1));
+                Aips = Aips.substr(1)
+                Aips = Aips.substr(0,Aips.length - 1)
+                console.log(Aips);
+                this.params.ips = Aips
             },
             
                
@@ -116,7 +123,8 @@
                     status:1,
                     type:"1",
                     remark:'',
-                    id:''
+                    id:'',
+                    adminId:''
                 },
                 rules: {
                     phone: [
@@ -138,7 +146,7 @@
             }
         },
         mounted(){
-            this.params.adminId = JSON.parse(window.localStorage.getItem("user")).id
+            
         }
     }
 </script>

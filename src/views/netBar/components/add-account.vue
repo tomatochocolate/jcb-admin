@@ -110,7 +110,7 @@
                     ],
                     ips: [
                         { required: true, message: '请输入ip', trigger: 'change blur' },
-                        { min: 6, max: 16, message: '请输入ip地址' }
+                        { min: 8, max: 16, message: '请输入完整ip地址' }
                     ],
                     Ntype: [
                         { required: true, message: '请输入密码', trigger: 'change blur' },
