@@ -6,10 +6,10 @@
               :model="params" :rules="rules" :label-width="140"
               @submit.native.prevent>
             <FormItem prop="phone" label="手机号码">
-                <Input clearable type="text" placeholder="请输入管理员账号" v-model="params.phone" @on-enter="supplement"/>
+                <Input clearable type="text" placeholder="请输入手机号码" v-model="params.phone" @on-enter="supplement"/>
             </FormItem> 
             <FormItem prop="proxyName" label="代理名字">
-                <Input clearable type="text" placeholder="请输入密码" v-model="params.proxyName" @on-enter="supplement"/>
+                <Input clearable type="text" placeholder="请输入代理名称" v-model="params.proxyName" @on-enter="supplement"/>
             </FormItem>                        
         </Form>
         <div slot="footer">
