@@ -1,5 +1,5 @@
 <template>
-    <Modal mask-closable scrollable title="补充代理商账号"
+    <Modal mask-closable scrollable title="补充代理后台账号"
            :width="500" :loading="isSubmit"
            v-model="show">
         <Form ref="form"
@@ -8,8 +8,8 @@
             <FormItem prop="phone" label="手机号码">
                 <Input clearable type="text" placeholder="请输入手机号码" v-model="params.phone" @on-enter="supplement"/>
             </FormItem> 
-            <FormItem prop="proxyName" label="代理名字">
-                <Input clearable type="text" placeholder="请输入代理名称" v-model="params.proxyName" @on-enter="supplement"/>
+            <FormItem prop="proxyName" label="所属代理商">
+                <Input clearable type="text" placeholder="请输入所属代理商名称" v-model="params.proxyName" @on-enter="supplement"/>
             </FormItem>                        
         </Form>
         <div slot="footer">

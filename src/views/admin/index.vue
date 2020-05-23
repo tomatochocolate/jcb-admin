@@ -18,7 +18,7 @@
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
                         <Button type="info" @click="handleAddAccount">添加管理员</Button>
                         <!-- <Button type="info" @click="handleTableAccount">添加用户套餐记录</Button> -->
-                        <Button type="info" @click="handlemodifyAccount">代理商账号补充</Button>
+                        <Button type="info" @click="handlemodifyAccount">补充代理后台账号</Button>
                     </FormItem>
                 </Col>
             </Row>
