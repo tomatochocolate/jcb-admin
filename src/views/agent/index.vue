@@ -95,6 +95,9 @@
                 <Button type="error" size="small" style="margin-right: 5px" @click="offAgent(row)">禁用</Button>
                 <!-- <Button type="success" size="small" @click="handlemodifyAccount">修改</Button> -->
             </template>
+            <template slot-scope="{ row, index }" slot="status">
+                {{row.status == 1?'正常':'禁用'}}
+            </template>
             <template slot-scope="{ row, index }" slot="goodsButton">
                 <Button type="warning" size="small" style="margin-right: 5px" @click="watchYe(row)">查看余额</Button>
                 <Drawer title="套餐总余额" :closable="false" v-model="value1">
@@ -312,8 +315,8 @@
                         minWidth: 100
                     },
                     {
-                        key: 'status',
-                        title: '账号状态(1)正常(0)禁用',
+                        slot: 'status',
+                        title: '账号状态',
                         width: 200,
                         align: 'center'
                     },
@@ -329,12 +332,12 @@
                         align: 'center',
                         minWidth: 100
                     },
-                    {
-                        key: 'loginAccount',
-                        title: '账号',
-                        align: 'center',
-                        width: 200
-                    },
+                    // {
+                    //     key: 'loginAccount',
+                    //     title: '账号',
+                    //     align: 'center',
+                    //     width: 200
+                    // },
                     {
                         slot:'goodsButton',
                         key: 'goodsButton',
