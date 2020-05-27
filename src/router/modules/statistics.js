@@ -8,7 +8,7 @@ export default [
         path: '/statistics',
         meta: {
             icon: 'ios-analytics',
-            title: '未开通',
+            title: '运营统计',
             permissions: [ 'guest' ]
         },
         component: Main,
@@ -19,7 +19,7 @@ export default [
                 meta: {
                     menu: false
                 },
-                component: () => import(/* webpackChunkName: "statistics" */'@/views/other/develop')
+                component: () => import(/* webpackChunkName: "statistics" */'@/views/statistics')
             }
         ]
     }
