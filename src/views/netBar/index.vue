@@ -16,7 +16,7 @@
                 <Col>
                     <FormItem class="btn-group">
                         <Button type="primary" @click="handleFilterQuery">查询</Button>
-                        <Button type="info" @click="handleAddAccount">新增或者修改网吧信息</Button>
+                        <Button type="info" @click="handleAddAccount">新增网吧信息</Button>
                         <!-- <Button type="info" @click="handleTableAccount">添加用户套餐记录</Button> -->
                         <!-- <Button type="info" @click="handlemodifyAccount">代理商账号补充</Button> -->
                     </FormItem>
@@ -180,12 +180,12 @@
                         width: 200,
                         align: 'center'
                     },
-                    {
-                        key: 'id',
-                        title: '管理员ID',
-                        align: 'center',
-                        minWidth: 100
-                    },
+                    // {
+                    //     key: 'id',
+                    //     title: '管理员ID',
+                    //     align: 'center',
+                    //     minWidth: 100
+                    // },
                     {
                         slot: 'type',
                         title: '商户类型',
