@@ -48,7 +48,7 @@
                                     v-model="filterParams.created_at" />
                     </FormItem>
                 </Col> -->
-                <Col :xs="12" :sm="6" :lg="4" :xl="3">
+                <Col :xs="12" :sm="6" :lg="4" :xl="4">
                     <FormItem prop="payAdd">
                         <DatePicker format="yyyy/MM/dd HH:mm" type="datetimerange" placement="bottom-start" placeholder="下单时间区间"
                                     :options="datePickerOptions"
