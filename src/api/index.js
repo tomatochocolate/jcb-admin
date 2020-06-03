@@ -17,6 +17,7 @@ import * as coupon from './modules/coupon'
 import * as agent from './modules/agent'
 import * as admin from './modules/admin'
 import * as netBar from './modules/netBar'
+import * as analysis from './modules/analysis'
 
 export {
     axios, instance,
@@ -34,5 +35,6 @@ export {
     coupon,
     agent,
     admin,
-    netBar
+    netBar,
+    analysis
 }

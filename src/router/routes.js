@@ -14,6 +14,7 @@ import statistics from './modules/statistics'
 import coupon from './modules/coupon'
 import admin from './modules/admin'
 import netBar from './modules/netBar'
+import analysis from './modules/analysis'
 
 export default [
     ...home,
@@ -28,5 +29,6 @@ export default [
     ...user,
     ...goods,
     ...admin,
-    ...netBar
+    ...netBar,
+    ...analysis
 ]
